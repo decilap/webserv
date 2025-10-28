@@ -1,0 +1,18 @@
+ID,Épic,Description,Estimation,Priorité,Statut
+A1,Infrastructure & Boucle d’événements,Lancer webserv avec un fichier .conf et ouvrir les sockets d’écoute,XS,Obligatoire,Backlog
+A2,Infrastructure & Boucle d’événements,Gérer N connexions simultanées via un seul poll(),L,Obligatoire,Backlog
+A3,Infrastructure & Boucle d’événements,Jamais lire/écrire sans disponibilité préalable du FD,M,Obligatoire,Backlog
+B1,HTTP Core,Réponse 200 pour un fichier statique existant,L,Obligatoire,Backlog
+B2,HTTP Core,"Codes d’erreur précis (400, 403, 404, 405, 413, 500...)",M,Obligatoire,Backlog
+B3,HTTP Core,Support des méthodes GET/POST/DELETE selon les règles de la location,M,Obligatoire,Backlog
+B4,HTTP Core,Support du transfert chunked,L,Obligatoire,Backlog
+C1,Configuration & Routage,Support de plusieurs ports/IP et de locations,S,Obligatoire,Backlog
+C2,Configuration & Routage,Pages d’erreur personnalisées,S,Obligatoire,Backlog
+C3,Configuration & Routage,Limitation de taille client_max_body_size,S,Obligatoire,Backlog
+D1,Upload & Autoindex,Upload multipart vers upload_path,M,Obligatoire,Backlog
+D2,Upload & Autoindex,Listing HTML si autoindex on et pas d’index,S,Obligatoire,Backlog
+E1,CGI,"Exécuter un CGI (.php, .py) avec environnement complet",L,Obligatoire,Backlog
+E2,CGI,"Gérer timeout, EOF, Content-Length manquant et nettoyage FDs",L,Obligatoire,Backlog
+F1,Robustesse & Performance,Aucune fuite mémoire/FD détectée,M,Obligatoire,Backlog
+F2,Robustesse & Performance,Serveur réactif sous charge,M,Obligatoire,Backlog
+F3,Robustesse & Performance,Comportement comparable à NGINX,S,Obligatoire,Backlog
