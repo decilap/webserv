@@ -229,6 +229,29 @@ bool Client::handleRead()
 
             std::string body = (req.getMethod() == "POST") ? req.getBody() : "";
 
+            // === Vérifie existence et permissions du script ===
+            struct stat st;
+            if (stat(script.c_str(), &st) < 0)
+            {
+                std::cerr << "[CGI] Not found: " << script << std::endl;
+                res.setStatus(404);
+                res.setBodyFromFile("www/error_pages/404.html");
+                _bufferOut = res.build();
+                _bufferIn.clear();
+                _state = CLIENT_WRITE;
+                return true;
+            }
+            if (access(script.c_str(), X_OK) != 0)
+            {
+                std::cerr << "[CGI] Permission denied: " << script << std::endl;
+                res.setStatus(403);
+                res.setBodyFromFile("www/error_pages/403.html");
+                _bufferOut = res.build();
+                _bufferIn.clear();
+                _state = CLIENT_WRITE;
+                return true;
+            }
+
             // === Lancement du script CGI ===
             CgiHandler::Result r = cgi.run(script, "", env, body);
 
