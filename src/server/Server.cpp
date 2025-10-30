@@ -62,3 +62,7 @@ void Server::stop() {
     _listenSockets.clear();
     _running = false;
 }
+
+std::vector<int> Server::getListeningSockets() const {
+    return _listenSockets;
+}

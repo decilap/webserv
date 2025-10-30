@@ -3,7 +3,8 @@ CXX = c++
 CXXFLAGS = -Wall -Wextra -Werror -std=c++98
 
 SRC = src/main.cpp \
-      src/server/Server.cpp
+      src/server/Server.cpp \
+      src/server/PollManager.cpp 
 
 OBJ = $(SRC:.cpp=.o)
 

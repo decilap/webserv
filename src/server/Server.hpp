@@ -25,6 +25,8 @@ public:
 
     void start();  // lance les sockets d’écoute
     void stop();   // ferme proprement
+    std::vector<int> getListeningSockets() const;
+
 };
 
 #endif
