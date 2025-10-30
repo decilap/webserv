@@ -10,12 +10,15 @@
 #include <cerrno>
 #include <cstring>
 
+#include "Client.hpp"
 #include "Server.hpp"  // pour accéder aux sockets d’écoute
+#include <map>
 
 class PollManager {
 private:
     std::vector<struct pollfd> _fds; // tous les FDs surveillés
     std::map<int, bool> _isListening; // pour savoir si un FD est un socket d’écoute
+    std::map<int, Client*> _clients;
 
     bool _running;
 

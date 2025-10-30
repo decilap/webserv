@@ -17,6 +17,9 @@ void PollManager::addListeningSockets(const std::vector<int>& sockets) {
     }
 }
 
+#include "PollManager.hpp"
+#include "Client.hpp"
+
 void PollManager::acceptNewClient(int listenFd) {
     sockaddr_in clientAddr;
     socklen_t len = sizeof(clientAddr);
@@ -27,13 +30,17 @@ void PollManager::acceptNewClient(int listenFd) {
     }
 
     int flags = fcntl(clientFd, F_GETFL, 0);
-    fcntl(clientFd, F_SETFL, flags | O_NONBLOCK);
-
+    if (flags == -1)
+        flags = 0;
+    if (fcntl(clientFd, F_SETFL, flags | O_NONBLOCK) == -1)
+        std::cerr << "[Poll] fcntl(O_NONBLOCK) failed on fd " << clientFd << std::endl;
     struct pollfd clientPfd;
     clientPfd.fd = clientFd;
     clientPfd.events = POLLIN;
     clientPfd.revents = 0;
     _fds.push_back(clientPfd);
+    Client *c = new Client(clientFd);
+    _clients[clientFd] = c;
 
     std::cout << "[Poll] New client connected (fd " << clientFd << ")" << std::endl;
 }
