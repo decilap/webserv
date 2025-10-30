@@ -1,91 +1,36 @@
 #include "HttpResponse.hpp"
+#include "Autoindex.hpp"
 
-HttpResponse::HttpResponse() : _status(0) {
+HttpResponse::HttpResponse() {
     _statusTexts[200] = "OK";
     _statusTexts[201] = "Created";
-    _statusTexts[404] = "Not Found";
+    _statusTexts[204] = "No Content";
+    _statusTexts[301] = "Moved Permanently";
+    _statusTexts[302] = "Found";
+    _statusTexts[303] = "See Other";
+    _statusTexts[400] = "Bad Request";
     _statusTexts[403] = "Forbidden";
+    _statusTexts[404] = "Not Found";
     _statusTexts[500] = "Internal Server Error";
+    _status = 0;
 }
 
 void HttpResponse::setStatus(int code) { _status = code; }
-
 void HttpResponse::setHeader(const std::string &key, const std::string &value) {
     _headers[key] = value;
 }
+void HttpResponse::setBody(const std::string &body) { _body = body; }
+void HttpResponse::setBodyString(const std::string &body) { _body = body; }
 
-void HttpResponse::setBody(const std::string &body) {
-    _body = body;
-}
-
+// Fichier simple uniquement
 void HttpResponse::setBodyFromFile(const std::string &path) {
-    std::ifstream file(path.c_str(), std::ios::in | std::ios::binary);
-    if (!file.is_open()) {
-        _status = 404;
-        _body = _errorPage.getErrorBody(404);
-        return;
-    }
-
-    try {
-        std::ostringstream ss;
-        ss << file.rdbuf();
-
-        if (file.fail() && !file.eof()) {
-            std::cerr << "[HttpResponse] Error reading file: " << path << std::endl;
-            _status = 500;
-            _body = _errorPage.getErrorBody(500);
-            file.close();
-            return;
-        }
-
-        _body = ss.str();
-        _status = 200;
-        file.close();
-    } catch (const std::exception &e) {
-        std::cerr << "[HttpResponse] Exception while reading file: " << e.what() << std::endl;
-        _status = 500;
-        _body = _errorPage.getErrorBody(500);
-    }
-}
-
-void HttpResponse::setBodyFromFile(const std::string &path, const std::string &uri) {
-    setBodyFromPath(path, uri);
-}
-
-void HttpResponse::setBodyFromPath(const std::string &path, const std::string &uri) {
     struct stat st;
-
-    // Vérifier si le chemin existe
-    if (stat(path.c_str(), &st) < 0) {
+    if (stat(path.c_str(), &st) < 0 || S_ISDIR(st.st_mode)) {
         _status = 404;
         _body = _errorPage.getErrorBody(404);
         return;
     }
 
-    // 📁 Cas 1 : le chemin est un répertoire
-    if (S_ISDIR(st.st_mode)) {
-        std::string indexPath = path + "/index.html";
-
-        // S'il y a un index.html, on le sert
-        if (stat(indexPath.c_str(), &st) == 0 && !S_ISDIR(st.st_mode)) {
-            std::ifstream indexFile(indexPath.c_str());
-            if (indexFile.is_open()) {
-                std::ostringstream ss;
-                ss << indexFile.rdbuf();
-                _body = ss.str();
-                _status = 200;
-                indexFile.close();
-                return;
-            }
-        }
-
-        // Sinon on génère l'autoindex
-        _body = Autoindex::generate(path, uri);
-        _status = 200;
-        return;
-    }
-
-    // 📄 Cas 2 : le chemin est un fichier régulier
     std::ifstream file(path.c_str(), std::ios::in | std::ios::binary);
     if (!file.is_open()) {
         _status = 403;
@@ -93,34 +38,63 @@ void HttpResponse::setBodyFromPath(const std::string &path, const std::string &u
         return;
     }
 
-    try {
-        std::ostringstream ss;
-        ss << file.rdbuf();
+    std::ostringstream ss;
+    ss << file.rdbuf();
+    _body = ss.str();
+    _status = 200;
+    file.close();
+}
 
-        if (file.fail() && !file.eof()) {
-            std::cerr << "[HttpResponse] Error reading file: " << path << std::endl;
-            _status = 500;
-            _body = _errorPage.getErrorBody(500);
-            file.close();
-            return;
+// Fichier ou dossier (autoindex)
+void HttpResponse::setBodyFromFile(const std::string &path, const std::string &uri) {
+    struct stat st;
+    if (stat(path.c_str(), &st) < 0) {
+        _status = 404;
+        _body = _errorPage.getErrorBody(404);
+        return;
+    }
+
+    if (S_ISDIR(st.st_mode)) {
+        std::string indexPath = path + "/index.html";
+        if (stat(indexPath.c_str(), &st) == 0 && !S_ISDIR(st.st_mode)) {
+            std::ifstream file(indexPath.c_str());
+            if (file.is_open()) {
+                std::ostringstream ss;
+                ss << file.rdbuf();
+                _body = ss.str();
+                _status = 200;
+                file.close();
+                return;
+            }
         }
 
-        _body = ss.str();
+        // Aucun index -> autoindex
+        _body = Autoindex::generate(path, uri);
         _status = 200;
-        file.close();
-    } catch (const std::exception &e) {
-        std::cerr << "[HttpResponse] Exception while reading file: " << e.what() << std::endl;
-        _status = 500;
-        _body = _errorPage.getErrorBody(500);
+        return;
     }
+
+    // Sinon, fichier normal
+    setBodyFromFile(path);
 }
 
 std::string HttpResponse::build() const {
     std::ostringstream res;
-    res << "HTTP/1.1 " << _status << " " << _statusTexts.at(_status) << "\r\n";
-    res << "Content-Type: text/html\r\n";
+    int statusCode = _status ? _status : 200;
+    std::string statusText = _statusTexts.count(statusCode) ? _statusTexts.at(statusCode) : "OK";
+
+    res << "HTTP/1.1 " << statusCode << " " << statusText << "\r\n";
+
+    // Headers par défaut
+    if (_headers.find("Content-Type") == _headers.end())
+        res << "Content-Type: text/html\r\n";
     res << "Content-Length: " << _body.size() << "\r\n";
-    res << "Connection: close\r\n\r\n";
-    res << _body;
+    res << "Connection: close\r\n";
+
+    // Headers personnalisés
+    for (std::map<std::string, std::string>::const_iterator it = _headers.begin(); it != _headers.end(); ++it)
+        res << it->first << ": " << it->second << "\r\n";
+
+    res << "\r\n" << _body;
     return res.str();
 }
