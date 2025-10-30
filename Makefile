@@ -7,7 +7,8 @@ SRC = src/main.cpp \
       src/server/Client.cpp \
       src/server/PollManager.cpp \
       src/http/HttpRequest.cpp \
-      src/http/HttpResponse.cpp
+      src/http/HttpResponse.cpp \
+      src/http/ErrorPage.cpp
 
 
 OBJ = $(SRC:.cpp=.o)

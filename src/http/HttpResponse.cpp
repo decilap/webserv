@@ -15,23 +15,46 @@ void HttpResponse::setHeader(const std::string &key, const std::string &value) {
 
 void HttpResponse::setBodyFromFile(const std::string &path) {
     struct stat st;
+
+    // Vérifier si le fichier existe
     if (stat(path.c_str(), &st) < 0 || S_ISDIR(st.st_mode)) {
         _status = 404;
-        _body = "<html><body><h1>404 Not Found</h1></body></html>";
+        _body = _errorPage.getErrorBody(404);
         return;
     }
 
+    // Vérifier si le fichier peut être ouvert
     std::ifstream file(path.c_str(), std::ios::in | std::ios::binary);
-    if (!file) {
+    if (!file.is_open()) {
         _status = 403;
-        _body = "<html><body><h1>403 Forbidden</h1></body></html>";
+        _body = _errorPage.getErrorBody(403);
         return;
     }
 
-    std::ostringstream ss;
-    ss << file.rdbuf();
-    _body = ss.str();
-    _status = 200;
+    try {
+        // Lire le contenu du fichier
+        std::ostringstream ss;
+        ss << file.rdbuf();
+
+        // Vérifier si la lecture a échoué
+        if (file.fail() && !file.eof()) {
+            std::cerr << "[HttpResponse] Error reading file: " << path << std::endl;
+            _status = 500;
+            _body = _errorPage.getErrorBody(500);
+            file.close();
+            return;
+        }
+
+        _body = ss.str();
+        _status = 200;
+        file.close();
+    } catch (const std::exception &e) {
+        // Gérer toute exception lors de la lecture
+        std::cerr << "[HttpResponse] Exception while reading file: " << e.what() << std::endl;
+        _status = 500;
+        _body = _errorPage.getErrorBody(500);
+        file.close();
+    }
 }
 
 std::string HttpResponse::build() const {

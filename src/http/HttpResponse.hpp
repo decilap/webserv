@@ -7,6 +7,7 @@
 #include <fstream>
 #include <iostream>
 #include <sys/stat.h>
+#include "ErrorPage.hpp"
 
 class HttpResponse {
 private:
@@ -14,6 +15,8 @@ private:
     std::map<int, std::string> _statusTexts;
     std::map<std::string, std::string> _headers;
     std::string _body;
+    ErrorPage _errorPage;
+
 
 public:
     HttpResponse();
