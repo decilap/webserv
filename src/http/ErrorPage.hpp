@@ -1,11 +1,7 @@
 #ifndef ERRORPAGE_HPP
 #define ERRORPAGE_HPP
 
-#include <string>
-#include <map>
-#include <fstream>
-#include <sstream>
-#include <iostream>
+#include "../common.hpp"
 
 class ErrorPage {
 private:

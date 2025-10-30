@@ -1,12 +1,5 @@
+#include "../common.hpp"
 #include "CgiHandler.hpp"
-#include <unistd.h>
-#include <fcntl.h>
-#include <sys/wait.h>
-#include <poll.h>
-#include <errno.h>
-#include <cstring>
-#include <iostream>
-#include <signal.h>
 
 
 CgiHandler::CgiHandler() {}

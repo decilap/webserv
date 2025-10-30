@@ -1,11 +1,7 @@
 #ifndef HTTPRESPONSE_HPP
 #define HTTPRESPONSE_HPP
 
-#include <string>
-#include <map>
-#include <sstream>
-#include <fstream>
-#include <iostream>
+#include "../common.hpp"
 #include "ErrorPage.hpp"
 #include "Autoindex.hpp"
 

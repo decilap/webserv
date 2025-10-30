@@ -1,13 +1,7 @@
 #ifndef CLIENT_HPP
 #define CLIENT_HPP
 
-#include <string>
-#include <unistd.h>
-#include <iostream>
-#include <cerrno>
-#include <cstring>
-#include <sys/socket.h>
-#include <fcntl.h>
+#include "../common.hpp"
 
 enum ClientState {
     CLIENT_READ,

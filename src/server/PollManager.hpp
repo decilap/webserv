@@ -1,19 +1,10 @@
 #ifndef POLLMANAGER_HPP
 #define POLLMANAGER_HPP
 
-#include <vector>
-#include <map>
-#include <iostream>
-#include <poll.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <cerrno>
-#include <cstring>
-
+#include "../common.hpp"
 #include "Client.hpp"
-#include "Server.hpp"  // pour accéder aux sockets d'écoute
+#include "Server.hpp"
 #include "../config/ServerConfig.hpp"
-#include <map>
 
 class PollManager {
 private:

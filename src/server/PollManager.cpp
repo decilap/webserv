@@ -1,12 +1,6 @@
+#include "../common.hpp"
 #include "PollManager.hpp"
 #include "Client.hpp"
-#include <netinet/in.h>   // ✅ sockaddr_in, htons, htonl
-#include <sys/socket.h>   // ✅ socket(), bind(), accept()
-#include <arpa/inet.h>    // ✅ inet_ntoa(), inet_addr() (optionnel)
-#include <unistd.h>       // ✅ close()
-#include <fcntl.h>        // ✅ fcntl()
-#include <cerrno>         // ✅ errno
-#include <cstring>        // ✅ strerror()
 
 PollManager::PollManager() : _running(false) {}
 PollManager::~PollManager() {
@@ -28,9 +22,6 @@ void PollManager::addListeningSockets(const std::vector<int>& sockets) {
 void PollManager::addServerConfig(int socket, const ServerConfig& config) {
     _socketToConfig[socket] = config;
 }
-
-#include "PollManager.hpp"
-#include "Client.hpp"
 
 void PollManager::acceptNewClient(int listenFd) {
     sockaddr_in clientAddr;

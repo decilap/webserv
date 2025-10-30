@@ -1,8 +1,6 @@
-#include <csignal>
-#include <cstdlib>
+#include "common.hpp"
 #include "server/Server.hpp"
 #include "config/ConfigParser.hpp"
-#include "server/Server.hpp"
 #include "server/PollManager.hpp"
 
 Server *g_srv = NULL;

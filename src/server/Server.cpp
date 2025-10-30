@@ -1,10 +1,5 @@
+#include "../common.hpp"
 #include "Server.hpp"
-#include <iostream>
-#include <unistd.h>
-#include <fcntl.h>
-#include <cstring>
-#include <netinet/in.h>
-#include <sys/socket.h>
 
 Server::Server() : _running(false) {}
 

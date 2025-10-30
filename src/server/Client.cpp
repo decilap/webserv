@@ -1,10 +1,9 @@
+#include "../common.hpp"
 #include "Client.hpp"
 #include "../cgi/CgiHandler.hpp"
 #include "../http/HttpRequest.hpp"
 #include "../http/HttpResponse.hpp"
 #include "../http/MultipartParser.hpp"
-
-#include <fstream>
 
 Client::Client(int fd, const std::string& root) : _fd(fd), _state(CLIENT_READ), _root(root)
 {

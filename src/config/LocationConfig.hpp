@@ -1,8 +1,7 @@
 #ifndef LOCATION_CONFIG_HPP
 #define LOCATION_CONFIG_HPP
 
-#include <string>
-#include <vector>
+#include "../common.hpp"
 
 struct LocationConfig {
     std::string path;               // ex: /upload

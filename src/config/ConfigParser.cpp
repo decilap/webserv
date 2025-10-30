@@ -1,8 +1,5 @@
+#include "../common.hpp"
 #include "ConfigParser.hpp"
-#include <fstream>
-#include <sstream>
-#include <iostream>
-#include <stdexcept>
 
 // Helper function to remove trailing semicolon
 static std::string trimSemicolon(const std::string& str) {

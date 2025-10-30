@@ -1,8 +1,7 @@
 #ifndef SERVER_HPP
 #define SERVER_HPP
 
-#include <vector>
-#include <string>
+#include "../common.hpp"
 #include "../config/ServerConfig.hpp"
 
 class Server {

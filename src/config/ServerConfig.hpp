@@ -1,8 +1,7 @@
 #ifndef SERVER_CONFIG_HPP
 #define SERVER_CONFIG_HPP
 
-#include <string>
-#include <vector>
+#include "../common.hpp"
 #include "LocationConfig.hpp"
 
 struct ServerConfig {
