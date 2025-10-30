@@ -278,7 +278,7 @@ bool Client::handleRead()
 
                 while (std::getline(ss, line))
                 {
-                    if (!line.empty() && line.back() == '\r')
+                    if (!line.empty() && line[line.size() - 1] == '\r')
                         line.erase(line.size() - 1);
 
                     if (line.find("Status:") == 0)
@@ -286,8 +286,7 @@ bool Client::handleRead()
                         std::string val = line.substr(7);
                         while (!val.empty() && val[0] == ' ')
                             val.erase(0, 1);
-                        status = std::atoi(val.c_str());
-                    }
+                    status = ft_atoi(val.c_str());                    }
                     else if (line.find("Content-Type:") == 0)
                     {
                         std::string val = line.substr(13);
