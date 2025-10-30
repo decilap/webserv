@@ -113,9 +113,18 @@ bool Client::handleRead() {
 
     // --- Sinon, GET standard ---
     HttpResponse res;
-    std::string path = "www" + req.getUri();
-    if (path == "www/") path = "www/index.html";
-    res.setBodyFromFile(path);
+    std::string uri = req.getUri();
+    std::string path = "www" + uri;
+
+    // Check if root path, serve index.html
+    if (path == "www/") {
+        path = "www/index.html";
+        res.setBodyFromFile(path);
+    } else {
+        // Use setBodyFromPath to handle both files and directories
+        res.setBodyFromPath(path, uri);
+    }
+
     _bufferOut = res.build();
     _bufferIn.clear();
     _state = CLIENT_WRITE;

@@ -8,6 +8,7 @@
 #include <iostream>
 #include <sys/stat.h>
 #include "ErrorPage.hpp"
+#include "Autoindex.hpp"
 
 class HttpResponse {
 private:
@@ -24,6 +25,8 @@ public:
     void setHeader(const std::string &key, const std::string &value);
     void setBody(const std::string &body);
     void setBodyFromFile(const std::string &path);
+    void setBodyFromFile(const std::string &path, const std::string &uri);
+    void setBodyFromPath(const std::string &path, const std::string &uri);
     std::string build() const;
 };
 

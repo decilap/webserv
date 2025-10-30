@@ -9,8 +9,8 @@ SRC = src/main.cpp \
       src/http/HttpRequest.cpp \
       src/http/HttpResponse.cpp \
       src/http/MultipartParser.cpp \
-      src/http/ErrorPage.cpp
-
+      src/http/ErrorPage.cpp \
+      src/http/Autoindex.cpp
 
 OBJ = $(SRC:.cpp=.o)
 
