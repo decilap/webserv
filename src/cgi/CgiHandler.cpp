@@ -1,12 +1,5 @@
+#include "../common.hpp"
 #include "CgiHandler.hpp"
-#include <unistd.h>
-#include <fcntl.h>
-#include <sys/wait.h>
-#include <poll.h>
-#include <errno.h>
-#include <cstring>
-#include <iostream>
-#include <signal.h>
 
 
 CgiHandler::CgiHandler() {}
@@ -134,8 +127,20 @@ CgiHandler::Result CgiHandler::run(const std::string &script_path,
         int status = 0;
         pid_t w = waitpid(pid, &status, WNOHANG);
         if (w == pid) {
-            // enfant terminé -> continuer de vider possible stdout
-            // mais si plus rien à lire, on sortira au prochain tour
+            // enfant terminé, lire toutes les données restantes dans le pipe
+            while (true) {
+                ssize_t n = read(outpipe[0], buf, sizeof(buf));
+                if (n > 0) {
+                    out.append(buf, n);
+                    if (out.size() > max_output) {
+                        break;
+                    }
+                } else {
+                    // n == 0 (EOF) ou n == -1 avec EAGAIN (no more data)
+                    break;
+                }
+            }
+            break;
         }
 
         elapsed += step;

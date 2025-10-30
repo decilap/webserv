@@ -1,0 +1,1228 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sprints - Webserv 42 Development</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .code-block {
+            background: #1e1e1e;
+            border-left: 4px solid #4ade80;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, #4ade80, #3b82f6);
+        }
+
+        .sprint-card {
+            transition: all 0.3s ease;
+        }
+
+        .sprint-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .epic-badge {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        .sidebar {
+            position: sticky;
+            top: 2rem;
+            max-height: calc(100vh - 4rem);
+            overflow-y: auto;
+        }
+
+        .sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.5);
+        }
+    </style>
+</head>
+<body class="text-gray-100">
+    <!-- Navigation Bar -->
+    <nav class="glass mb-8">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <a href="index.html" class="text-2xl font-bold text-white hover:text-green-400 transition">
+                    ← Retour à l'accueil
+                </a>
+                <div class="text-xl font-bold text-green-400">
+                    Plan de Sprints
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto px-6 pb-20">
+        <!-- Hero Section -->
+        <div class="text-center mb-16 animate-fade-in">
+            <h1 class="text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-green-400 to-blue-500">
+                🚀 Plan de Développement par Sprints
+            </h1>
+            <p class="text-2xl text-gray-200 mb-4">Méthodologie Agile pour Webserv HTTP/1.1</p>
+            <div class="flex justify-center gap-4 mb-8">
+                <span class="glass px-6 py-3 rounded-full text-sm font-semibold">
+                    📅 6 Sprints • 28 Jours
+                </span>
+                <span class="glass px-6 py-3 rounded-full text-sm font-semibold">
+                    ✅ 6 Épics • 20+ Stories
+                </span>
+                <span class="glass px-6 py-3 rounded-full text-sm font-semibold">
+                    🎯 Objectif: Production Ready
+                </span>
+            </div>
+        </div>
+
+        <div class="flex gap-8">
+            <!-- Sidebar Navigation -->
+            <aside class="w-64 flex-shrink-0 sidebar">
+                <div class="glass rounded-2xl p-6">
+                    <h3 class="text-lg font-bold mb-4 text-green-400">📋 Navigation</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#overview" class="hover:text-green-400 transition block py-1">Vue d'ensemble</a></li>
+                        <li><a href="#workflow" class="hover:text-green-400 transition block py-1">Workflow & Règles</a></li>
+                        <li><a href="#epics" class="hover:text-green-400 transition block py-1">Épics & Stories</a></li>
+                        <li><a href="#sprint0" class="hover:text-green-400 transition block py-1">Sprint 0: Kickoff</a></li>
+                        <li><a href="#sprint1" class="hover:text-green-400 transition block py-1">Sprint 1: Réseau</a></li>
+                        <li><a href="#sprint2" class="hover:text-green-400 transition block py-1">Sprint 2: HTTP</a></li>
+                        <li><a href="#sprint3" class="hover:text-green-400 transition block py-1">Sprint 3: Upload</a></li>
+                        <li><a href="#sprint4" class="hover:text-green-400 transition block py-1">Sprint 4: CGI</a></li>
+                        <li><a href="#sprint5" class="hover:text-green-400 transition block py-1">Sprint 5: Production</a></li>
+                        <li><a href="#checklists" class="hover:text-green-400 transition block py-1">Checklists</a></li>
+                        <li><a href="#risks" class="hover:text-green-400 transition block py-1">Matrice de Risques</a></li>
+                        <li><a href="#rituals" class="hover:text-green-400 transition block py-1">Rituels Agile</a></li>
+                    </ul>
+                </div>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="flex-1">
+                <!-- Overview Section -->
+                <section id="overview" class="mb-16">
+                    <div class="glass rounded-2xl p-8">
+                        <h2 class="text-4xl font-bold mb-6 text-green-400">📊 Vue d'Ensemble</h2>
+
+                        <div class="mb-8">
+                            <h3 class="text-2xl font-semibold mb-4">🎯 Objectif Global</h3>
+                            <p class="text-lg leading-relaxed text-gray-200">
+                                Livrer un <strong class="text-green-400">serveur HTTP/1.1 non bloquant</strong> en <strong class="text-blue-400">C++98</strong>,
+                                conforme au sujet 42, robuste (anti-leaks, anti-crash), prêt pour l'évaluation avec jeux de tests,
+                                documentation et configuration de démonstration.
+                            </p>
+                        </div>
+
+                        <!-- Timeline -->
+                        <div class="mb-8">
+                            <h3 class="text-2xl font-semibold mb-4">📅 Timeline des Sprints</h3>
+                            <div class="grid grid-cols-3 gap-4">
+                                <div class="bg-gradient-to-br from-purple-600 to-purple-800 rounded-lg p-4">
+                                    <div class="text-xs uppercase font-semibold mb-1 text-purple-200">Sprint 0-1</div>
+                                    <div class="text-sm font-bold mb-2">Setup & Réseau</div>
+                                    <div class="text-xs text-gray-300">Oct 28 → Nov 3</div>
+                                    <div class="text-xs text-green-400 mt-2">✓ Fondations</div>
+                                </div>
+
+                                <div class="bg-gradient-to-br from-blue-600 to-blue-800 rounded-lg p-4">
+                                    <div class="text-xs uppercase font-semibold mb-1 text-blue-200">Sprint 2-3</div>
+                                    <div class="text-sm font-bold mb-2">HTTP & Features</div>
+                                    <div class="text-xs text-gray-300">Nov 4 → Nov 13</div>
+                                    <div class="text-xs text-green-400 mt-2">✓ Fonctionnalités</div>
+                                </div>
+
+                                <div class="bg-gradient-to-br from-green-600 to-green-800 rounded-lg p-4">
+                                    <div class="text-xs uppercase font-semibold mb-1 text-green-200">Sprint 4-5</div>
+                                    <div class="text-sm font-bold mb-2">CGI & Production</div>
+                                    <div class="text-xs text-gray-300">Nov 14 → Nov 24</div>
+                                    <div class="text-xs text-green-400 mt-2">✓ Polissage</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Estimations -->
+                        <div class="mb-8">
+                            <h3 class="text-2xl font-semibold mb-4">📏 Référentiel d'Estimation</h3>
+                            <div class="grid grid-cols-5 gap-3">
+                                <div class="bg-gray-800 rounded-lg p-3 text-center">
+                                    <div class="text-2xl font-bold text-purple-400">XS</div>
+                                    <div class="text-xs text-gray-400">0.5 jour</div>
+                                </div>
+                                <div class="bg-gray-800 rounded-lg p-3 text-center">
+                                    <div class="text-2xl font-bold text-blue-400">S</div>
+                                    <div class="text-xs text-gray-400">1 jour</div>
+                                </div>
+                                <div class="bg-gray-800 rounded-lg p-3 text-center">
+                                    <div class="text-2xl font-bold text-green-400">M</div>
+                                    <div class="text-xs text-gray-400">2 jours</div>
+                                </div>
+                                <div class="bg-gray-800 rounded-lg p-3 text-center">
+                                    <div class="text-2xl font-bold text-yellow-400">L</div>
+                                    <div class="text-xs text-gray-400">3-4 jours</div>
+                                </div>
+                                <div class="bg-gray-800 rounded-lg p-3 text-center">
+                                    <div class="text-2xl font-bold text-red-400">XL</div>
+                                    <div class="text-xs text-gray-400">5+ jours</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Workflow Section -->
+                <section id="workflow" class="mb-16">
+                    <div class="glass rounded-2xl p-8">
+                        <h2 class="text-4xl font-bold mb-6 text-green-400">⚙️ Workflow & Règles d'Équipe</h2>
+
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <!-- Branching Strategy -->
+                            <div class="bg-gray-800 bg-opacity-50 rounded-lg p-6">
+                                <h3 class="text-xl font-semibold mb-4 flex items-center">
+                                    <span class="text-2xl mr-2">🌿</span> Stratégie de Branching
+                                </h3>
+                                <ul class="space-y-2 text-sm">
+                                    <li class="flex items-start">
+                                        <span class="text-green-400 mr-2">▸</span>
+                                        <span><code class="bg-gray-900 px-2 py-1 rounded">main</code> - Production stable (protégée)</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-blue-400 mr-2">▸</span>
+                                        <span><code class="bg-gray-900 px-2 py-1 rounded">develop</code> - Branche de développement</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-purple-400 mr-2">▸</span>
+                                        <span><code class="bg-gray-900 px-2 py-1 rounded">feat/&lt;module&gt;</code> - Nouvelles fonctionnalités</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-red-400 mr-2">▸</span>
+                                        <span><code class="bg-gray-900 px-2 py-1 rounded">bugfix/&lt;id&gt;</code> - Corrections de bugs</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-yellow-400 mr-2">▸</span>
+                                        <span><code class="bg-gray-900 px-2 py-1 rounded">chore/&lt;task&gt;</code> - Tâches de maintenance</span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <!-- Commit Convention -->
+                            <div class="bg-gray-800 bg-opacity-50 rounded-lg p-6">
+                                <h3 class="text-xl font-semibold mb-4 flex items-center">
+                                    <span class="text-2xl mr-2">💬</span> Convention de Commits
+                                </h3>
+                                <div class="space-y-3 text-sm">
+                                    <div>
+                                        <div class="text-green-400 font-mono text-xs mb-1">Format:</div>
+                                        <code class="bg-gray-900 px-3 py-2 rounded block">type(scope): message</code>
+                                    </div>
+                                    <div>
+                                        <div class="text-blue-400 font-mono text-xs mb-1">Exemples:</div>
+                                        <div class="space-y-1">
+                                            <code class="bg-gray-900 px-2 py-1 rounded block text-xs">feat(poll): add edge-triggered loop</code>
+                                            <code class="bg-gray-900 px-2 py-1 rounded block text-xs">fix(http): handle chunked encoding</code>
+                                            <code class="bg-gray-900 px-2 py-1 rounded block text-xs">refactor(cgi): simplify env setup</code>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- CI Pipeline -->
+                            <div class="bg-gray-800 bg-opacity-50 rounded-lg p-6">
+                                <h3 class="text-xl font-semibold mb-4 flex items-center">
+                                    <span class="text-2xl mr-2">🔄</span> CI Locale
+                                </h3>
+                                <div class="space-y-2 text-sm">
+                                    <div class="flex items-center">
+                                        <span class="text-green-400 mr-2">✓</span>
+                                        <code class="bg-gray-900 px-2 py-1 rounded text-xs">make</code>
+                                        <span class="ml-2 text-gray-400">Compilation</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <span class="text-blue-400 mr-2">✓</span>
+                                        <code class="bg-gray-900 px-2 py-1 rounded text-xs">make test</code>
+                                        <span class="ml-2 text-gray-400">Tests unitaires</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <span class="text-purple-400 mr-2">✓</span>
+                                        <code class="bg-gray-900 px-2 py-1 rounded text-xs">make valgrind</code>
+                                        <span class="ml-2 text-gray-400">Memory check</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <span class="text-yellow-400 mr-2">✓</span>
+                                        <code class="bg-gray-900 px-2 py-1 rounded text-xs">make lint</code>
+                                        <span class="ml-2 text-gray-400">Code style</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Definition of Done -->
+                            <div class="bg-gray-800 bg-opacity-50 rounded-lg p-6">
+                                <h3 class="text-xl font-semibold mb-4 flex items-center">
+                                    <span class="text-2xl mr-2">✅</span> Definition of Done
+                                </h3>
+                                <ul class="space-y-2 text-sm">
+                                    <li class="flex items-start">
+                                        <span class="text-green-400 mr-2">•</span>
+                                        Code + tests passent
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-green-400 mr-2">•</span>
+                                        Valgrind clean (0 leaks)
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-green-400 mr-2">•</span>
+                                        Documentation mise à jour
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-green-400 mr-2">•</span>
+                                        Configuration démo
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-green-400 mr-2">•</span>
+                                        Démontrable (curl/browser)
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Epics Section -->
+                <section id="epics" class="mb-16">
+                    <div class="glass rounded-2xl p-8">
+                        <h2 class="text-4xl font-bold mb-6 text-green-400">📦 Épics & User Stories</h2>
+
+                        <div class="space-y-6">
+                            <!-- Epic A -->
+                            <div class="bg-gradient-to-r from-purple-900 to-purple-800 rounded-lg p-6">
+                                <div class="flex items-center mb-4">
+                                    <span class="epic-badge bg-purple-600 text-white px-4 py-2 rounded-full text-sm font-bold mr-3">EPIC A</span>
+                                    <h3 class="text-2xl font-semibold">Infrastructure & Boucle d'événements</h3>
+                                </div>
+                                <ul class="space-y-2 text-sm">
+                                    <li class="flex items-start">
+                                        <span class="text-green-400 mr-2">A1.</span>
+                                        <span>En tant qu'<strong>opérateur</strong>, je peux <strong>lancer webserv</strong> avec un fichier <code class="bg-gray-900 px-2 py-1 rounded">.conf</code></span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-green-400 mr-2">A2.</span>
+                                        <span>En tant que <strong>serveur</strong>, je gère <strong>N connexions simultanées</strong> via un seul <code class="bg-gray-900 px-2 py-1 rounded">poll()</code></span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-green-400 mr-2">A3.</span>
+                                        <span>En tant que <strong>serveur</strong>, je <strong>n'écris/lis jamais</strong> sans disponibilité préalable du FD</span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <!-- Epic B -->
+                            <div class="bg-gradient-to-r from-blue-900 to-blue-800 rounded-lg p-6">
+                                <div class="flex items-center mb-4">
+                                    <span class="epic-badge bg-blue-600 text-white px-4 py-2 rounded-full text-sm font-bold mr-3">EPIC B</span>
+                                    <h3 class="text-2xl font-semibold">HTTP Core</h3>
+                                </div>
+                                <ul class="space-y-2 text-sm">
+                                    <li class="flex items-start">
+                                        <span class="text-green-400 mr-2">B1.</span>
+                                        <span>En tant que <strong>client</strong>, je reçois une <strong>réponse 200</strong> pour un fichier statique existant</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-green-400 mr-2">B2.</span>
+                                        <span>En tant que <strong>client</strong>, je reçois les <strong>codes d'erreur</strong> adaptés (400, 403, 404, 405, 413, 500)</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-green-400 mr-2">B3.</span>
+                                        <span>En tant que <strong>client</strong>, je peux utiliser <strong>GET/POST/DELETE</strong> selon les règles de la location</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-green-400 mr-2">B4.</span>
+                                        <span>En tant que <strong>client</strong>, je peux envoyer une requête <strong>chunked</strong> et recevoir une réponse correcte</span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <!-- Epic C -->
+                            <div class="bg-gradient-to-r from-green-900 to-green-800 rounded-lg p-6">
+                                <div class="flex items-center mb-4">
+                                    <span class="epic-badge bg-green-600 text-white px-4 py-2 rounded-full text-sm font-bold mr-3">EPIC C</span>
+                                    <h3 class="text-2xl font-semibold">Configuration & Routage</h3>
+                                </div>
+                                <ul class="space-y-2 text-sm">
+                                    <li class="flex items-start">
+                                        <span class="text-green-400 mr-2">C1.</span>
+                                        <span>En tant qu'<strong>admin</strong>, je définis <strong>plusieurs ports/IP</strong> et <strong>locations</strong> (root, index, autoindex, redir, méthodes, upload, cgi)</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-green-400 mr-2">C2.</span>
+                                        <span>En tant qu'<strong>admin</strong>, je configure des <strong>pages d'erreur</strong> personnalisées</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-green-400 mr-2">C3.</span>
+                                        <span>En tant qu'<strong>admin</strong>, je limite <strong>client_max_body_size</strong></span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <!-- Epic D -->
+                            <div class="bg-gradient-to-r from-yellow-900 to-yellow-800 rounded-lg p-6">
+                                <div class="flex items-center mb-4">
+                                    <span class="epic-badge bg-yellow-600 text-white px-4 py-2 rounded-full text-sm font-bold mr-3">EPIC D</span>
+                                    <h3 class="text-2xl font-semibold">Upload & Autoindex</h3>
+                                </div>
+                                <ul class="space-y-2 text-sm">
+                                    <li class="flex items-start">
+                                        <span class="text-green-400 mr-2">D1.</span>
+                                        <span>En tant qu'<strong>utilisateur</strong>, je peux <strong>uploader</strong> un fichier (multipart) vers <code class="bg-gray-900 px-2 py-1 rounded">upload_path</code></span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-green-400 mr-2">D2.</span>
+                                        <span>En tant que <strong>visiteur</strong>, je vois un <strong>listing HTML</strong> si <code class="bg-gray-900 px-2 py-1 rounded">autoindex on</code> et pas d'index</span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <!-- Epic E -->
+                            <div class="bg-gradient-to-r from-red-900 to-red-800 rounded-lg p-6">
+                                <div class="flex items-center mb-4">
+                                    <span class="epic-badge bg-red-600 text-white px-4 py-2 rounded-full text-sm font-bold mr-3">EPIC E</span>
+                                    <h3 class="text-2xl font-semibold">CGI</h3>
+                                </div>
+                                <ul class="space-y-2 text-sm">
+                                    <li class="flex items-start">
+                                        <span class="text-green-400 mr-2">E1.</span>
+                                        <span>En tant que <strong>développeur</strong>, je peux exécuter un <strong>CGI</strong> (.php, .py) avec env correct</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-green-400 mr-2">E2.</span>
+                                        <span>En tant que <strong>serveur</strong>, je gère <strong>timeout</strong>, <strong>EOF</strong>, Content-Length absent, et <strong>nettoyage FDs</strong></span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <!-- Epic F -->
+                            <div class="bg-gradient-to-r from-pink-900 to-pink-800 rounded-lg p-6">
+                                <div class="flex items-center mb-4">
+                                    <span class="epic-badge bg-pink-600 text-white px-4 py-2 rounded-full text-sm font-bold mr-3">EPIC F</span>
+                                    <h3 class="text-2xl font-semibold">Robustesse & Performance</h3>
+                                </div>
+                                <ul class="space-y-2 text-sm">
+                                    <li class="flex items-start">
+                                        <span class="text-green-400 mr-2">F1.</span>
+                                        <span>En tant qu'<strong>évaluateur</strong>, je ne détecte <strong>aucune fuite</strong> (mémoire/FD)</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-green-400 mr-2">F2.</span>
+                                        <span>En tant que <strong>client</strong>, le serveur reste <strong>réactif</strong> sous charge (wrk/ab)</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-green-400 mr-2">F3.</span>
+                                        <span>En tant qu'<strong>évaluateur</strong>, je peux comparer avec <strong>NGINX</strong> et constater la cohérence</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Sprint 0 -->
+                <section id="sprint0" class="mb-16">
+                    <div class="glass rounded-2xl p-8 sprint-card">
+                        <div class="flex items-center justify-between mb-6">
+                            <h2 class="text-4xl font-bold text-purple-400">🟦 Sprint 0 — Kickoff & Setup</h2>
+                            <span class="bg-purple-600 text-white px-4 py-2 rounded-full text-sm font-bold">2 jours</span>
+                        </div>
+
+                        <div class="mb-6">
+                            <div class="text-sm text-gray-400 mb-2">📅 2025-10-28 → 2025-10-29</div>
+                            <p class="text-lg text-gray-200">Base de repo, outillage, pipeline local, squelettes</p>
+                        </div>
+
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <h3 class="text-xl font-semibold mb-3 text-green-400">📋 Stories</h3>
+                                <ul class="space-y-1 text-sm">
+                                    <li>• A1 (XS) - Launch config</li>
+                                    <li>• C1-part (S) - Config parser</li>
+                                </ul>
+                            </div>
+
+                            <div>
+                                <h3 class="text-xl font-semibold mb-3 text-blue-400">✅ Definition of Done</h3>
+                                <ul class="space-y-1 text-sm">
+                                    <li>✓ Build OK</li>
+                                    <li>✓ Exécutable lance lecture conf</li>
+                                    <li>✓ Logs init fonctionnels</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="mt-6">
+                            <h3 class="text-xl font-semibold mb-3 text-yellow-400">🔧 Tâches Principales</h3>
+                            <div class="bg-gray-800 bg-opacity-50 rounded-lg p-4">
+                                <ul class="space-y-2 text-sm">
+                                    <li class="flex items-start">
+                                        <span class="text-green-400 mr-2">▸</span>
+                                        Init repo + Makefile minimal (<code class="bg-gray-900 px-2 py-1 rounded">-Wall -Wextra -Werror -std=c++98</code>)
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-green-400 mr-2">▸</span>
+                                        Arborescence (<code class="bg-gray-900 px-2 py-1 rounded">src/, include/, conf/, www/</code>)
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-green-400 mr-2">▸</span>
+                                        Logger minimal + gestion erreurs fatales
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-green-400 mr-2">▸</span>
+                                        Conf par défaut <code class="bg-gray-900 px-2 py-1 rounded">conf/default.conf</code>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-green-400 mr-2">▸</span>
+                                        Scripts: <code class="bg-gray-900 px-2 py-1 rounded">tools/run_valgrind.sh</code>, <code class="bg-gray-900 px-2 py-1 rounded">tools/stress.sh</code>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="mt-6">
+                            <h3 class="text-xl font-semibold mb-3 text-purple-400">📦 Livrable</h3>
+                            <p class="text-sm text-gray-300">Repo clonable, README, conf par défaut</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Sprint 1 -->
+                <section id="sprint1" class="mb-16">
+                    <div class="glass rounded-2xl p-8 sprint-card">
+                        <div class="flex items-center justify-between mb-6">
+                            <h2 class="text-4xl font-bold text-blue-400">🟦 Sprint 1 — Réseau & Événements</h2>
+                            <span class="bg-blue-600 text-white px-4 py-2 rounded-full text-sm font-bold">5 jours</span>
+                        </div>
+
+                        <div class="mb-6">
+                            <div class="text-sm text-gray-400 mb-2">📅 2025-10-30 → 2025-11-03</div>
+                            <p class="text-lg text-gray-200">Sockets non bloquantes, accept, clients, <strong>un</strong> poll() central</p>
+                        </div>
+
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <h3 class="text-xl font-semibold mb-3 text-green-400">📋 Stories</h3>
+                                <ul class="space-y-1 text-sm">
+                                    <li>• A1 (S) - Server launch</li>
+                                    <li>• A2 (L) - N connexions poll()</li>
+                                    <li>• A3 (M) - Non-blocking discipline</li>
+                                </ul>
+                            </div>
+
+                            <div>
+                                <h3 class="text-xl font-semibold mb-3 text-blue-400">✅ Definition of Done</h3>
+                                <ul class="space-y-1 text-sm">
+                                    <li>✓ Échos simples possibles</li>
+                                    <li>✓ Pas de blocage</li>
+                                    <li>✓ Pas de fuites FD</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="mt-6">
+                            <h3 class="text-xl font-semibold mb-3 text-yellow-400">🔧 Tâches Principales</h3>
+                            <div class="bg-gray-800 bg-opacity-50 rounded-lg p-4">
+                                <ul class="space-y-2 text-sm">
+                                    <li class="flex items-start">
+                                        <span class="text-green-400 mr-2">▸</span>
+                                        Création sockets d'écoute (multi-port), <code class="bg-gray-900 px-2 py-1 rounded">fcntl(O_NONBLOCK)</code>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-green-400 mr-2">▸</span>
+                                        PollManager: registre FD, intentions R/W, timeouts
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-green-400 mr-2">▸</span>
+                                        ClientState: buffers RX/TX, états (READ_HEADERS, READ_BODY, WRITE, CLOSE)
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-green-400 mr-2">▸</span>
+                                        Discipline: jamais de read/write hors disponibilité
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="mt-6">
+                            <h3 class="text-xl font-semibold mb-3 text-red-400">🧪 Tests</h3>
+                            <div class="code-block rounded-lg p-4 font-mono text-sm overflow-x-auto">
+<pre class="text-gray-300">nc localhost 8080
+telnet localhost 8080
+# Connexions multiples, timeouts</pre>
+                            </div>
+                        </div>
+
+                        <div class="mt-6">
+                            <h3 class="text-xl font-semibold mb-3 text-purple-400">📦 Livrable</h3>
+                            <p class="text-sm text-gray-300">Démonstration accept multi-clients (sans HTTP complet)</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Sprint 2 -->
+                <section id="sprint2" class="mb-16">
+                    <div class="glass rounded-2xl p-8 sprint-card">
+                        <div class="flex items-center justify-between mb-6">
+                            <h2 class="text-4xl font-bold text-green-400">🟦 Sprint 2 — HTTP & Statique</h2>
+                            <span class="bg-green-600 text-white px-4 py-2 rounded-full text-sm font-bold">5 jours</span>
+                        </div>
+
+                        <div class="mb-6">
+                            <div class="text-sm text-gray-400 mb-2">📅 2025-11-04 → 2025-11-08</div>
+                            <p class="text-lg text-gray-200">Parsing requêtes, réponses, fichiers statiques, erreurs</p>
+                        </div>
+
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <h3 class="text-xl font-semibold mb-3 text-green-400">📋 Stories</h3>
+                                <ul class="space-y-1 text-sm">
+                                    <li>• B1 (L) - Static files 200</li>
+                                    <li>• B2 (M) - Error codes</li>
+                                    <li>• C2 (S) - Custom error pages</li>
+                                    <li>• C3 (S) - Body size limit</li>
+                                </ul>
+                            </div>
+
+                            <div>
+                                <h3 class="text-xl font-semibold mb-3 text-blue-400">✅ Definition of Done</h3>
+                                <ul class="space-y-1 text-sm">
+                                    <li>✓ Servir www/index.html</li>
+                                    <li>✓ Erreurs précises</li>
+                                    <li>✓ Valgrind clean</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="mt-6">
+                            <h3 class="text-xl font-semibold mb-3 text-yellow-400">🔧 Tâches Principales</h3>
+                            <div class="bg-gray-800 bg-opacity-50 rounded-lg p-4">
+                                <ul class="space-y-2 text-sm">
+                                    <li class="flex items-start">
+                                        <span class="text-green-400 mr-2">▸</span>
+                                        Parser HTTP/1.1: start-line, headers, Connection, Host, validation
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-green-400 mr-2">▸</span>
+                                        Gestion body: Content-Length, <strong>chunked</strong> (déchunking), limites
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-green-400 mr-2">▸</span>
+                                        MIME types, ResponseBuilder, pages d'erreur configurables
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-green-400 mr-2">▸</span>
+                                        Static handler: mapping URL→filesystem (sécurité path traversal)
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="mt-6">
+                            <h3 class="text-xl font-semibold mb-3 text-red-400">🧪 Tests</h3>
+                            <div class="code-block rounded-lg p-4 font-mono text-sm overflow-x-auto">
+<pre class="text-gray-300">curl -v http://127.0.0.1:8080/
+curl -v http://127.0.0.1:8080/notfound        # 404
+curl -v http://127.0.0.1:8080/large.bin       # 413
+curl -X DELETE http://127.0.0.1:8080/file     # 405</pre>
+                            </div>
+                        </div>
+
+                        <div class="mt-6">
+                            <h3 class="text-xl font-semibold mb-3 text-purple-400">📦 Livrable</h3>
+                            <p class="text-sm text-gray-300">Mini site statique complet avec gestion erreurs</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Sprint 3 -->
+                <section id="sprint3" class="mb-16">
+                    <div class="glass rounded-2xl p-8 sprint-card">
+                        <div class="flex items-center justify-between mb-6">
+                            <h2 class="text-4xl font-bold text-yellow-400">🟦 Sprint 3 — Upload, Autoindex, Redirections</h2>
+                            <span class="bg-yellow-600 text-white px-4 py-2 rounded-full text-sm font-bold">5 jours</span>
+                        </div>
+
+                        <div class="mb-6">
+                            <div class="text-sm text-gray-400 mb-2">📅 2025-11-09 → 2025-11-13</div>
+                            <p class="text-lg text-gray-200">Multipart upload, autoindex, return 3xx, DELETE</p>
+                        </div>
+
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <h3 class="text-xl font-semibold mb-3 text-green-400">📋 Stories</h3>
+                                <ul class="space-y-1 text-sm">
+                                    <li>• D1 (M) - Multipart upload</li>
+                                    <li>• D2 (S) - Autoindex HTML</li>
+                                    <li>• B3 (M) - DELETE method</li>
+                                    <li>• C1-complément (S) - Redirections</li>
+                                </ul>
+                            </div>
+
+                            <div>
+                                <h3 class="text-xl font-semibold mb-3 text-blue-400">✅ Definition of Done</h3>
+                                <ul class="space-y-1 text-sm">
+                                    <li>✓ Upload vers upload_path</li>
+                                    <li>✓ Autoindex propre</li>
+                                    <li>✓ DELETE sécurisé</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="mt-6">
+                            <h3 class="text-xl font-semibold mb-3 text-yellow-400">🔧 Tâches Principales</h3>
+                            <div class="bg-gray-800 bg-opacity-50 rounded-lg p-4">
+                                <ul class="space-y-2 text-sm">
+                                    <li class="flex items-start">
+                                        <span class="text-green-400 mr-2">▸</span>
+                                        Multipart parser (boundary, fichiers, limites, droits)
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-green-400 mr-2">▸</span>
+                                        Autoindex HTML (tri, lien parent, taille/date)
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-green-400 mr-2">▸</span>
+                                        DELETE sécurisé (vérif location/permissions)
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-green-400 mr-2">▸</span>
+                                        Redirections 301/302 + Location header
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="mt-6">
+                            <h3 class="text-xl font-semibold mb-3 text-red-400">🧪 Tests</h3>
+                            <div class="code-block rounded-lg p-4 font-mono text-sm overflow-x-auto">
+<pre class="text-gray-300">curl -F 'file=@test.txt' http://127.0.0.1:8080/upload
+curl -F 'file=@big.bin' http://127.0.0.1:8080/upload   # >1MB
+curl -X DELETE http://127.0.0.1:8080/files/a.txt
+curl -v http://127.0.0.1:8080/redirect                 # 301</pre>
+                            </div>
+                        </div>
+
+                        <div class="mt-6">
+                            <h3 class="text-xl font-semibold mb-3 text-purple-400">📦 Livrable</h3>
+                            <p class="text-sm text-gray-300">Démo formulaire upload + delete tool page</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Sprint 4 -->
+                <section id="sprint4" class="mb-16">
+                    <div class="glass rounded-2xl p-8 sprint-card">
+                        <div class="flex items-center justify-between mb-6">
+                            <h2 class="text-4xl font-bold text-red-400">🟦 Sprint 4 — CGI & Sécurité</h2>
+                            <span class="bg-red-600 text-white px-4 py-2 rounded-full text-sm font-bold">6 jours</span>
+                        </div>
+
+                        <div class="mb-6">
+                            <div class="text-sm text-gray-400 mb-2">📅 2025-11-14 → 2025-11-19</div>
+                            <p class="text-lg text-gray-200">Exécution CGI (php-cgi/python), env complet, timeouts, nettoyage</p>
+                        </div>
+
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <h3 class="text-xl font-semibold mb-3 text-green-400">📋 Stories</h3>
+                                <ul class="space-y-1 text-sm">
+                                    <li>• E1 (L) - CGI execution</li>
+                                    <li>• E2 (L) - Timeout & cleanup</li>
+                                </ul>
+                            </div>
+
+                            <div>
+                                <h3 class="text-xl font-semibold mb-3 text-blue-400">✅ Definition of Done</h3>
+                                <ul class="space-y-1 text-sm">
+                                    <li>✓ CGI stable</li>
+                                    <li>✓ Pas de zombie</li>
+                                    <li>✓ Pas de fuite FD</li>
+                                    <li>✓ 502 si CGI KO</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="mt-6">
+                            <h3 class="text-xl font-semibold mb-3 text-yellow-400">🔧 Tâches Principales</h3>
+                            <div class="bg-gray-800 bg-opacity-50 rounded-lg p-4">
+                                <ul class="space-y-2 text-sm">
+                                    <li class="flex items-start">
+                                        <span class="text-green-400 mr-2">▸</span>
+                                        CgiExecutor: fork/execve, pipes, dup2
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-green-400 mr-2">▸</span>
+                                        Env CGI: REQUEST_METHOD, SCRIPT_NAME, PATH_INFO, QUERY_STRING, CONTENT_LENGTH, CONTENT_TYPE, SERVER_PROTOCOL...
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-green-400 mr-2">▸</span>
+                                        Gestion entrée chunked → déchunk avant CGI (EOF attendu)
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-green-400 mr-2">▸</span>
+                                        Sortie CGI: headers + body, Content-Length optionnel, EOF
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-green-400 mr-2">▸</span>
+                                        Sécurité: chdir, droits d'exec, timeout (kill)
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="mt-6">
+                            <h3 class="text-xl font-semibold mb-3 text-red-400">🧪 Tests</h3>
+                            <div class="code-block rounded-lg p-4 font-mono text-sm overflow-x-auto">
+<pre class="text-gray-300">curl 'http://127.0.0.1:8080/cgi-bin/hello.py?name=42'
+curl -X POST --data 'key=value' http://127.0.0.1:8080/cgi-bin/form.py
+curl 'http://127.0.0.1:8080/cgi-bin/slow.py'  # timeout test</pre>
+                            </div>
+                        </div>
+
+                        <div class="mt-6">
+                            <h3 class="text-xl font-semibold mb-3 text-purple-400">📦 Livrable</h3>
+                            <p class="text-sm text-gray-300">Exemples CGI (Python/Shell) + conf dédiée</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Sprint 5 -->
+                <section id="sprint5" class="mb-16">
+                    <div class="glass rounded-2xl p-8 sprint-card">
+                        <div class="flex items-center justify-between mb-6">
+                            <h2 class="text-4xl font-bold text-pink-400">🟦 Sprint 5 — Performance & Production</h2>
+                            <span class="bg-pink-600 text-white px-4 py-2 rounded-full text-sm font-bold">5 jours</span>
+                        </div>
+
+                        <div class="mb-6">
+                            <div class="text-sm text-gray-400 mb-2">📅 2025-11-20 → 2025-11-24</div>
+                            <p class="text-lg text-gray-200">Performance/stress, robustesse, documentation, démo, parity NGINX</p>
+                        </div>
+
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <h3 class="text-xl font-semibold mb-3 text-green-400">📋 Stories</h3>
+                                <ul class="space-y-1 text-sm">
+                                    <li>• F1 (M) - No leaks</li>
+                                    <li>• F2 (M) - Performance tests</li>
+                                    <li>• F3 (S) - NGINX parity</li>
+                                </ul>
+                            </div>
+
+                            <div>
+                                <h3 class="text-xl font-semibold mb-3 text-blue-400">✅ Definition of Done</h3>
+                                <ul class="space-y-1 text-sm">
+                                    <li>✓ Tout vert</li>
+                                    <li>✓ Valgrind 0 leak</li>
+                                    <li>✓ Démo prête</li>
+                                    <li>✓ Documentation complète</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="mt-6">
+                            <h3 class="text-xl font-semibold mb-3 text-yellow-400">🔧 Tâches Principales</h3>
+                            <div class="bg-gray-800 bg-opacity-50 rounded-lg p-4">
+                                <ul class="space-y-2 text-sm">
+                                    <li class="flex items-start">
+                                        <span class="text-green-400 mr-2">▸</span>
+                                        Bench wrk/ab/siege (RPS, latence, 95p/99p)
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-green-400 mr-2">▸</span>
+                                        Limites: ulimit -n, connexions courtes/longues, Keep-Alive
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-green-400 mr-2">▸</span>
+                                        Audit sécurité: traversal, grosse charge, corps invalide, headers malformés
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-green-400 mr-2">▸</span>
+                                        Documentation finale + scripts démo + checklists éval
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="mt-6">
+                            <h3 class="text-xl font-semibold mb-3 text-red-400">🧪 Tests</h3>
+                            <div class="code-block rounded-lg p-4 font-mono text-sm overflow-x-auto">
+<pre class="text-gray-300">wrk -c 200 -d 30s http://127.0.0.1:8080/
+ab -n 10000 -c 100 http://127.0.0.1:8080/
+siege -c 100 -t 30s http://127.0.0.1:8080/
+valgrind --leak-check=full ./webserv</pre>
+                            </div>
+                        </div>
+
+                        <div class="mt-6">
+                            <h3 class="text-xl font-semibold mb-3 text-purple-400">📦 Livrable</h3>
+                            <p class="text-sm text-gray-300">Paquet de soutenance (conf, scénarios, pages erreurs, scripts)</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Checklists Section -->
+                <section id="checklists" class="mb-16">
+                    <div class="glass rounded-2xl p-8">
+                        <h2 class="text-4xl font-bold mb-6 text-green-400">✅ Checklists Anti-Leaks & Discipline I/O</h2>
+
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <!-- Memory & FDs -->
+                            <div class="bg-gray-800 bg-opacity-50 rounded-lg p-6">
+                                <h3 class="text-xl font-semibold mb-4 flex items-center">
+                                    <span class="text-2xl mr-2">💾</span> Mémoire & FDs
+                                </h3>
+                                <ul class="space-y-2 text-sm">
+                                    <li class="flex items-start">
+                                        <span class="text-green-400 mr-2">☐</span>
+                                        Valgrind <code class="bg-gray-900 px-2 py-1 rounded">--leak-check=full --track-fds=yes</code>: 0 leak, 0 FD perdu
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-green-400 mr-2">☐</span>
+                                        Tous chemins d'erreur ferment FDs (RAII/guards)
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-green-400 mr-2">☐</span>
+                                        Pas de <code class="bg-gray-900 px-2 py-1 rounded">new</code> sans <code class="bg-gray-900 px-2 py-1 rounded">delete</code>/smart wrapper
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-green-400 mr-2">☐</span>
+                                        Pas de <code class="bg-gray-900 px-2 py-1 rounded">throw</code> non rattrapé dans boucle serveur
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <!-- Network -->
+                            <div class="bg-gray-800 bg-opacity-50 rounded-lg p-6">
+                                <h3 class="text-xl font-semibold mb-4 flex items-center">
+                                    <span class="text-2xl mr-2">🌐</span> Réseau
+                                </h3>
+                                <ul class="space-y-2 text-sm">
+                                    <li class="flex items-start">
+                                        <span class="text-blue-400 mr-2">☐</span>
+                                        Tous FDs <code class="bg-gray-900 px-2 py-1 rounded">O_NONBLOCK</code>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-blue-400 mr-2">☐</span>
+                                        Jamais <code class="bg-gray-900 px-2 py-1 rounded">read/write</code> sans poll prêt
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-blue-400 mr-2">☐</span>
+                                        Gestion <code class="bg-gray-900 px-2 py-1 rounded">EINTR/EAGAIN/EWOULDBLOCK</code>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-blue-400 mr-2">☐</span>
+                                        Timeout inactifs → fermeture propre
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <!-- HTTP -->
+                            <div class="bg-gray-800 bg-opacity-50 rounded-lg p-6">
+                                <h3 class="text-xl font-semibold mb-4 flex items-center">
+                                    <span class="text-2xl mr-2">🌍</span> HTTP
+                                </h3>
+                                <ul class="space-y-2 text-sm">
+                                    <li class="flex items-start">
+                                        <span class="text-purple-400 mr-2">☐</span>
+                                        CRLF strict; headers multi-lignes; taille max headers
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-purple-400 mr-2">☐</span>
+                                        Sécurité chemin (normalisation, pas de <code class="bg-gray-900 px-2 py-1 rounded">..</code>)
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-purple-400 mr-2">☐</span>
+                                        Types MIME corrects
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-purple-400 mr-2">☐</span>
+                                        Pages d'erreur par défaut + personnalisées
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <!-- CGI -->
+                            <div class="bg-gray-800 bg-opacity-50 rounded-lg p-6">
+                                <h3 class="text-xl font-semibold mb-4 flex items-center">
+                                    <span class="text-2xl mr-2">⚡</span> CGI
+                                </h3>
+                                <ul class="space-y-2 text-sm">
+                                    <li class="flex items-start">
+                                        <span class="text-yellow-400 mr-2">☐</span>
+                                        Env complet; chdir; PATH_INFO/QUERY_STRING corrects
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-yellow-400 mr-2">☐</span>
+                                        Déchunk avant CGI
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-yellow-400 mr-2">☐</span>
+                                        Limitation durée/ressources
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-yellow-400 mr-2">☐</span>
+                                        Nettoyage processus enfant (waitpid non bloquant)
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Risk Matrix -->
+                <section id="risks" class="mb-16">
+                    <div class="glass rounded-2xl p-8">
+                        <h2 class="text-4xl font-bold mb-6 text-red-400">⚠️ Matrice de Risques</h2>
+
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-sm">
+                                <thead>
+                                    <tr class="bg-gray-800 bg-opacity-70">
+                                        <th class="p-3 text-left">Risque</th>
+                                        <th class="p-3 text-center">Probabilité</th>
+                                        <th class="p-3 text-center">Impact</th>
+                                        <th class="p-3 text-left">Stratégie</th>
+                                        <th class="p-3 text-left">Mesure</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="border-t border-gray-700">
+                                        <td class="p-3 font-semibold">Leaks mémoire/FD</td>
+                                        <td class="p-3 text-center">
+                                            <span class="bg-red-600 text-white px-3 py-1 rounded-full text-xs">Haute</span>
+                                        </td>
+                                        <td class="p-3 text-center">
+                                            <span class="bg-red-600 text-white px-3 py-1 rounded-full text-xs">Haute</span>
+                                        </td>
+                                        <td class="p-3">Valgrind en continu</td>
+                                        <td class="p-3">CI locale + hooks</td>
+                                    </tr>
+                                    <tr class="border-t border-gray-700">
+                                        <td class="p-3 font-semibold">Blocage I/O</td>
+                                        <td class="p-3 text-center">
+                                            <span class="bg-yellow-600 text-white px-3 py-1 rounded-full text-xs">Moyenne</span>
+                                        </td>
+                                        <td class="p-3 text-center">
+                                            <span class="bg-red-600 text-white px-3 py-1 rounded-full text-xs">Haute</span>
+                                        </td>
+                                        <td class="p-3">Discipline poll</td>
+                                        <td class="p-3">Tests EAGAIN</td>
+                                    </tr>
+                                    <tr class="border-t border-gray-700">
+                                        <td class="p-3 font-semibold">Temps CGI</td>
+                                        <td class="p-3 text-center">
+                                            <span class="bg-yellow-600 text-white px-3 py-1 rounded-full text-xs">Moyenne</span>
+                                        </td>
+                                        <td class="p-3 text-center">
+                                            <span class="bg-yellow-600 text-white px-3 py-1 rounded-full text-xs">Moyenne</span>
+                                        </td>
+                                        <td class="p-3">Timeout + kill</td>
+                                        <td class="p-3">Alarme + logs</td>
+                                    </tr>
+                                    <tr class="border-t border-gray-700">
+                                        <td class="p-3 font-semibold">Traversal path</td>
+                                        <td class="p-3 text-center">
+                                            <span class="bg-green-600 text-white px-3 py-1 rounded-full text-xs">Basse</span>
+                                        </td>
+                                        <td class="p-3 text-center">
+                                            <span class="bg-red-600 text-white px-3 py-1 rounded-full text-xs">Haute</span>
+                                        </td>
+                                        <td class="p-3">Normalisation</td>
+                                        <td class="p-3">Tests path</td>
+                                    </tr>
+                                    <tr class="border-t border-gray-700">
+                                        <td class="p-3 font-semibold">Surcharge connexions</td>
+                                        <td class="p-3 text-center">
+                                            <span class="bg-yellow-600 text-white px-3 py-1 rounded-full text-xs">Moyenne</span>
+                                        </td>
+                                        <td class="p-3 text-center">
+                                            <span class="bg-yellow-600 text-white px-3 py-1 rounded-full text-xs">Moyenne</span>
+                                        </td>
+                                        <td class="p-3">Limites + backoff</td>
+                                        <td class="p-3">Bench régulier</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Rituals Section -->
+                <section id="rituals" class="mb-16">
+                    <div class="glass rounded-2xl p-8">
+                        <h2 class="text-4xl font-bold mb-6 text-blue-400">🔄 Rituels Agile</h2>
+
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <!-- Daily -->
+                            <div class="bg-gradient-to-br from-blue-900 to-blue-800 rounded-lg p-6">
+                                <h3 class="text-xl font-semibold mb-4 flex items-center">
+                                    <span class="text-2xl mr-2">📅</span> Daily Stand-up
+                                </h3>
+                                <div class="space-y-2 text-sm">
+                                    <div><span class="text-blue-400 font-semibold">Durée:</span> 15 minutes</div>
+                                    <div><span class="text-blue-400 font-semibold">Questions:</span></div>
+                                    <ul class="ml-4 space-y-1">
+                                        <li>• Qu'ai-je fait hier ?</li>
+                                        <li>• Que vais-je faire aujourd'hui ?</li>
+                                        <li>• Quels obstacles ai-je ?</li>
+                                        <li>• Ai-je besoin d'aide ?</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <!-- Sprint Planning -->
+                            <div class="bg-gradient-to-br from-green-900 to-green-800 rounded-lg p-6">
+                                <h3 class="text-xl font-semibold mb-4 flex items-center">
+                                    <span class="text-2xl mr-2">📋</span> Sprint Planning
+                                </h3>
+                                <div class="space-y-2 text-sm">
+                                    <div><span class="text-green-400 font-semibold">Objectif:</span> Sélection des stories</div>
+                                    <div><span class="text-green-400 font-semibold">Activités:</span></div>
+                                    <ul class="ml-4 space-y-1">
+                                        <li>• Définir la capacité du sprint</li>
+                                        <li>• Sélectionner les stories du backlog</li>
+                                        <li>• Définir les critères d'acceptation</li>
+                                        <li>• Estimer les tâches</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <!-- Sprint Review -->
+                            <div class="bg-gradient-to-br from-purple-900 to-purple-800 rounded-lg p-6">
+                                <h3 class="text-xl font-semibold mb-4 flex items-center">
+                                    <span class="text-2xl mr-2">🎯</span> Sprint Review
+                                </h3>
+                                <div class="space-y-2 text-sm">
+                                    <div><span class="text-purple-400 font-semibold">Objectif:</span> Démonstration des features</div>
+                                    <div><span class="text-purple-400 font-semibold">Activités:</span></div>
+                                    <ul class="ml-4 space-y-1">
+                                        <li>• Démo de chaque feature complétée</li>
+                                        <li>• Validation des critères DoD</li>
+                                        <li>• Feedback des stakeholders</li>
+                                        <li>• Mise à jour du backlog</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <!-- Retrospective -->
+                            <div class="bg-gradient-to-br from-yellow-900 to-yellow-800 rounded-lg p-6">
+                                <h3 class="text-xl font-semibold mb-4 flex items-center">
+                                    <span class="text-2xl mr-2">🔍</span> Retrospective
+                                </h3>
+                                <div class="space-y-2 text-sm">
+                                    <div><span class="text-yellow-400 font-semibold">Format:</span> +/−/∆ (Plus, Minus, Delta)</div>
+                                    <div><span class="text-yellow-400 font-semibold">Questions:</span></div>
+                                    <ul class="ml-4 space-y-1">
+                                        <li>• <span class="text-green-400">+</span> Qu'est-ce qui s'est bien passé ?</li>
+                                        <li>• <span class="text-red-400">−</span> Qu'est-ce qui n'a pas marché ?</li>
+                                        <li>• <span class="text-blue-400">∆</span> Que changer pour le prochain sprint ?</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Ticket Template -->
+                        <div class="mt-8">
+                            <h3 class="text-2xl font-semibold mb-4">📝 Template de Ticket</h3>
+                            <div class="code-block rounded-lg p-6 font-mono text-sm">
+<pre class="text-gray-300">Story: &lt;id&gt; - &lt;titre&gt;
+Estimation: S/M/L
+
+Description:
+...
+
+Critères d'acceptation:
+- [ ] ...
+- [ ] ...
+
+Tests:
+- ...
+
+Impacts: réseau / http / cgi / conf / doc
+
+Checklist: anti-leaks / fd / poll / http / cgi</pre>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- CTA Section -->
+                <section class="text-center">
+                    <div class="glass rounded-2xl p-12">
+                        <h2 class="text-4xl font-bold mb-6 text-green-400">🎯 Prêt pour l'Évaluation</h2>
+                        <p class="text-xl text-gray-200 mb-8">
+                            Méthodologie éprouvée • 6 sprints • 20+ user stories • Production ready
+                        </p>
+                        <div class="flex justify-center gap-4">
+                            <a href="docs.html" class="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold py-4 px-8 rounded-full transition transform hover:scale-105 shadow-lg">
+                                📚 Voir la Documentation
+                            </a>
+                            <a href="bonus.html" class="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold py-4 px-8 rounded-full transition transform hover:scale-105 shadow-lg">
+                                ⭐ Découvrir les Bonus
+                            </a>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="glass mt-20 py-8">
+        <div class="container mx-auto px-6 text-center">
+            <p class="text-gray-300">
+                <strong>Webserv</strong> — Serveur HTTP/1.1 haute performance en C++98
+            </p>
+            <p class="text-sm text-gray-400 mt-2">
+                42 School Project • Méthodologie Agile • 6 Sprints • 28 Jours
+            </p>
+            <div class="mt-4 flex justify-center gap-4">
+                <span class="text-green-400 font-semibold">✅ 16/16 Tests</span>
+                <span class="text-blue-400 font-semibold">✅ 125/100 Score</span>
+                <span class="text-purple-400 font-semibold">✅ 0 Leaks</span>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,10 +1,8 @@
+#include "../common.hpp"
 #include "ConfigParser.hpp"
-#include <fstream>
-#include <sstream>
-#include <iostream>
-#include <stdexcept>
+#include "../utils.hpp"
 
-// Helper function to remove trailing semicolon
+
 static std::string trimSemicolon(const std::string& str) {
     std::string result = str;
     if (!result.empty() && result[result.size() - 1] == ';')
@@ -45,7 +43,7 @@ void ConfigParser::parseServerBlock(std::ifstream &file, ServerConfig &srv) {
         value = trimSemicolon(value);
 
         if (key == "listen")
-            srv.listen_port = std::atoi(value.c_str());
+            srv.listen_port = ft_atoi(value.c_str());
         else if (key == "server_name")
             srv.server_name = value;
         else if (key == "root")
@@ -53,7 +51,7 @@ void ConfigParser::parseServerBlock(std::ifstream &file, ServerConfig &srv) {
         else if (key == "index")
             srv.index = value;
         else if (key == "client_max_body_size") {
-            size_t num = std::atoi(value.c_str());
+            size_t num = ft_atoi(value.c_str());
             if (value.find('M') != std::string::npos)
                 num *= 1024 * 1024;
             srv.client_max_body_size = num;

@@ -1,17 +1,23 @@
+#include "../common.hpp"
 #include "PollManager.hpp"
 #include "Client.hpp"
-#include <netinet/in.h>   // ✅ sockaddr_in, htons, htonl
-#include <sys/socket.h>   // ✅ socket(), bind(), accept()
-#include <arpa/inet.h>    // ✅ inet_ntoa(), inet_addr() (optionnel)
-#include <unistd.h>       // ✅ close()
-#include <fcntl.h>        // ✅ fcntl()
-#include <cerrno>         // ✅ errno
-#include <cstring>        // ✅ strerror()
 
 PollManager::PollManager() : _running(false) {}
+
 PollManager::~PollManager() {
+    // Clean up all clients
+    for (std::map<int, Client*>::iterator it = _clients.begin(); it != _clients.end(); ++it) {
+        delete it->second;
+    }
+    _clients.clear();
+
+    // Close all file descriptors
     for (size_t i = 0; i < _fds.size(); ++i)
         close(_fds[i].fd);
+    _fds.clear();
+
+    _isListening.clear();
+    _socketToConfig.clear();
 }
 
 void PollManager::addListeningSockets(const std::vector<int>& sockets) {
@@ -28,9 +34,6 @@ void PollManager::addListeningSockets(const std::vector<int>& sockets) {
 void PollManager::addServerConfig(int socket, const ServerConfig& config) {
     _socketToConfig[socket] = config;
 }
-
-#include "PollManager.hpp"
-#include "Client.hpp"
 
 void PollManager::acceptNewClient(int listenFd) {
     sockaddr_in clientAddr;
@@ -161,4 +164,9 @@ void PollManager::loop() {
             }
         }
     }
+}
+
+void PollManager::stop() {
+    std::cout << "[Poll] Stopping event loop..." << std::endl;
+    _running = false;
 }

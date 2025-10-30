@@ -1,10 +1,7 @@
 #ifndef MULTIPARTPARSER_HPP
 #define MULTIPARTPARSER_HPP
 
-#include <string>
-#include <map>
-#include <vector>
-#include <iostream>
+#include "../common.hpp"
 
 class MultipartParser {
 private:

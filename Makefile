@@ -6,10 +6,6 @@ DFLAGS = -MMD -MP
 BUILD_DIR = build/
 INC_DIR = include/
 
-LIBFT_DIR = libft/
-LIBFT = $(LIBFT_DIR)libft.a
-LIBFT_INC = $(LIBFT_DIR)includes/
-
 SRC = src/main.cpp \
       src/server/Server.cpp \
       src/server/Client.cpp \
@@ -22,12 +18,13 @@ SRC = src/main.cpp \
       src/cgi/CgiHandler.cpp \
       src/config/ConfigParser.cpp \
       src/config/LocationConfig.cpp \
-      src/config/ServerConfig.cpp
+      src/config/ServerConfig.cpp \
+      src/utils.cpp
 
 OBJ = $(patsubst src/%.cpp, $(BUILD_DIR)%.o, $(SRC))
 DEPS = $(OBJ:.o=.d)
 
-all: $(LIBFT) $(NAME)
+all: $(NAME)
 
 $(BUILD_DIR):
 	@mkdir -p $(BUILD_DIR)
@@ -37,21 +34,16 @@ $(BUILD_DIR):
 	@mkdir -p $(BUILD_DIR)config
 
 $(BUILD_DIR)%.o: src/%.cpp | $(BUILD_DIR)
-	$(CXX) $(CXXFLAGS) $(DFLAGS) -I$(INC_DIR) -I$(LIBFT_INC) -c $< -o $@
+	$(CXX) $(CXXFLAGS) $(DFLAGS) -I$(INC_DIR) -c $< -o $@
 
-$(LIBFT):
-	@make -C $(LIBFT_DIR)
-
-$(NAME): $(OBJ) $(LIBFT)
-	$(CXX) $(CXXFLAGS) -o $(NAME) $(OBJ) $(LIBFT)
+$(NAME): $(OBJ)
+	$(CXX) $(CXXFLAGS) -o $(NAME) $(OBJ)
 
 clean:
 	rm -rf $(BUILD_DIR)
-	@make -C $(LIBFT_DIR) clean
 
 fclean: clean
 	rm -f $(NAME)
-	@make -C $(LIBFT_DIR) fclean
 
 re: fclean all
 

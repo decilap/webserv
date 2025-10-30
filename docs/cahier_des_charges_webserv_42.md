@@ -96,7 +96,7 @@ Chaque bloc `server` et `location` permet de définir :
 - Liste de méthodes acceptées (`allowed_methods`).
 - Redirections (`return 301` ou `return 302`).
 - Taille maximale du corps (`client_max_body_size`).
-- Page d’erreur personnalisée (`error_page`).
+- Page d’erreur personnalisée (`error_pages`).
 - Activation du listing de répertoire (`autoindex on/off`).
 - Upload autorisé et dossier cible (`upload_path`).
 - Activation de CGI selon extension (`cgi .php /usr/bin/php-cgi`).

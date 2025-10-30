@@ -1,8 +1,7 @@
 #ifndef CONFIG_PARSER_HPP
 #define CONFIG_PARSER_HPP
 
-#include <string>
-#include <vector>
+#include "../common.hpp"
 #include "ServerConfig.hpp"
 
 class ConfigParser {

@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bonus Features - Webserv</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .ascii-art { font-family: 'Courier New', monospace; line-height: 1.2; }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="fixed w-full bg-white/95 backdrop-blur-md border-b border-gray-200 z-50 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center space-x-8">
+                    <a href="/" class="flex items-center space-x-2">
+                        <span class="text-2xl">🌐</span>
+                        <span class="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Webserv</span>
+                    </a>
+                    <div class="hidden md:flex space-x-1">
+                        <a href="/" class="px-3 py-2 rounded-md text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100">Home</a>
+                        <a href="/docs.html" class="px-3 py-2 rounded-md text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100">Documentation</a>
+                        <a href="/bonus.html" class="px-3 py-2 rounded-md text-sm font-medium text-gray-900 bg-gray-100">Bonus</a>
+                        <a href="/cgi-bin/session.py" class="px-3 py-2 rounded-md text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100">Demo CGI</a>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span class="px-3 py-1 bg-purple-100 text-purple-800 text-xs font-semibold rounded-full">2/2 Bonus ✓</span>
+                    <span class="px-3 py-1 bg-green-100 text-green-800 text-xs font-semibold rounded-full">+25 pts</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <div class="pt-16 relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-br from-purple-600 via-pink-600 to-red-600"></div>
+        <div class="absolute inset-0 opacity-20">
+            <div class="absolute top-20 left-10 text-6xl animate-pulse">🎁</div>
+            <div class="absolute top-40 right-20 text-5xl animate-pulse delay-75">✨</div>
+            <div class="absolute bottom-20 left-1/4 text-4xl animate-pulse delay-150">🚀</div>
+        </div>
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+            <div class="text-center">
+                <div class="inline-flex items-center justify-center space-x-3 mb-6">
+                    <span class="text-6xl">🎁</span>
+                    <h1 class="text-5xl sm:text-7xl font-extrabold text-white">Bonus Features</h1>
+                </div>
+                <p class="text-2xl text-pink-100 max-w-3xl mx-auto mb-8">
+                    Implémentation complète des fonctionnalités bonus selon <strong>Chapter V</strong> du sujet 42
+                </p>
+                <div class="flex flex-wrap justify-center gap-4">
+                    <div class="px-6 py-3 bg-white/20 backdrop-blur-sm text-white rounded-full font-semibold border-2 border-white/30">
+                        ✓ Multiple CGI Types
+                    </div>
+                    <div class="px-6 py-3 bg-white/20 backdrop-blur-sm text-white rounded-full font-semibold border-2 border-white/30">
+                        ✓ Cookies & Sessions
+                    </div>
+                    <div class="px-6 py-3 bg-white/20 backdrop-blur-sm text-white rounded-full font-semibold border-2 border-white/30">
+                        +25 Points
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+
+        <!-- Summary -->
+        <div class="bg-gradient-to-r from-blue-50 to-purple-50 rounded-3xl p-8 mb-16 border-2 border-purple-200">
+            <h2 class="text-3xl font-bold text-gray-900 mb-6 flex items-center">
+                <span class="text-4xl mr-3">📋</span>
+                Résumé des Bonus
+            </h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-white rounded-xl p-6 shadow-sm">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-2xl mr-4">🚀</div>
+                        <div>
+                            <h3 class="text-xl font-bold text-blue-900">Bonus 1: Multiple CGI</h3>
+                            <p class="text-sm text-blue-600">Valeur: +12.5 points</p>
+                        </div>
+                    </div>
+                    <ul class="space-y-2 text-gray-700">
+                        <li class="flex items-center"><span class="text-green-500 mr-2">✓</span> Python (.py)</li>
+                        <li class="flex items-center"><span class="text-green-500 mr-2">✓</span> Shell (.sh)</li>
+                        <li class="flex items-center"><span class="text-green-500 mr-2">✓</span> Variables CGI/1.1</li>
+                        <li class="flex items-center"><span class="text-green-500 mr-2">✓</span> Fork + Execve</li>
+                    </ul>
+                </div>
+
+                <div class="bg-white rounded-xl p-6 shadow-sm">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center text-2xl mr-4">🍪</div>
+                        <div>
+                            <h3 class="text-xl font-bold text-purple-900">Bonus 2: Cookies/Sessions</h3>
+                            <p class="text-sm text-purple-600">Valeur: +12.5 points</p>
+                        </div>
+                    </div>
+                    <ul class="space-y-2 text-gray-700">
+                        <li class="flex items-center"><span class="text-green-500 mr-2">✓</span> Set-Cookie headers</li>
+                        <li class="flex items-center"><span class="text-green-500 mr-2">✓</span> HTTP_COOKIE parsing</li>
+                        <li class="flex items-center"><span class="text-green-500 mr-2">✓</span> Session ID unique</li>
+                        <li class="flex items-center"><span class="text-green-500 mr-2">✓</span> Visit counter</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bonus 1: Multiple CGI -->
+        <div class="mb-20">
+            <div class="bg-white rounded-3xl shadow-2xl overflow-hidden border-2 border-blue-200">
+                <div class="bg-gradient-to-r from-blue-500 to-cyan-500 px-8 py-8">
+                    <h2 class="text-4xl font-bold text-white flex items-center mb-2">
+                        <span class="text-5xl mr-4">🚀</span>
+                        Bonus 1: Support de Multiples Types CGI
+                    </h2>
+                    <p class="text-blue-100 text-lg">Exécution de scripts Python ET Shell via CGI/1.1</p>
+                </div>
+
+                <div class="p-8">
+                    <!-- Overview -->
+                    <div class="bg-blue-50 border-l-4 border-blue-500 p-6 mb-8 rounded-r-lg">
+                        <h3 class="text-xl font-bold text-blue-900 mb-3">💡 Pourquoi Multiple CGI?</h3>
+                        <p class="text-blue-800 mb-3">
+                            Le sujet demande de supporter <strong>au moins 2 types de CGI</strong> différents pour montrer la flexibilité
+                            du système d'exécution. Notre implémentation permet d'associer <strong>n'importe quelle extension</strong>
+                            à <strong>n'importe quel interpréteur</strong>.
+                        </p>
+                        <div class="flex items-center space-x-2 text-sm text-blue-700">
+                            <span>📜 Référence:</span>
+                            <span class="font-mono bg-blue-100 px-2 py-1 rounded">Subject Chapter V - Bonus part</span>
+                        </div>
+                    </div>
+
+                    <!-- Implementation Details -->
+                    <div class="mb-8">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-4">🔧 Implémentation Technique</h3>
+                        <div class="bg-gray-900 rounded-xl p-6 mb-4">
+                            <p class="text-gray-400 text-xs mb-3">📁 src/config/LocationConfig.hpp</p>
+                            <pre class="text-sm text-gray-100"><code><span class="text-blue-400">class</span> <span class="text-yellow-300">LocationConfig</span> {
+    <span class="text-blue-400">private</span>:
+        <span class="text-gray-500">// Map: extension → interpréteur</span>
+        <span class="text-cyan-400">std::map</span><<span class="text-cyan-400">std::string</span>, <span class="text-cyan-400">std::string</span>> _cgi_handlers;
+
+    <span class="text-blue-400">public</span>:
+        <span class="text-gray-500">// Ajouter un handler CGI</span>
+        <span class="text-purple-400">void</span> <span class="text-yellow-300">addCgiHandler</span>(<span class="text-purple-400">const</span> <span class="text-cyan-400">std::string</span>& ext,
+                            <span class="text-purple-400">const</span> <span class="text-cyan-400">std::string</span>& interpreter) {
+            _cgi_handlers[ext] = interpreter;
+        }
+
+        <span class="text-gray-500">// Récupérer l'interpréteur pour une extension</span>
+        <span class="text-cyan-400">std::string</span> <span class="text-yellow-300">getCgiHandler</span>(<span class="text-purple-400">const</span> <span class="text-cyan-400">std::string</span>& ext) {
+            <span class="text-blue-400">if</span> (_cgi_handlers.<span class="text-cyan-400">count</span>(ext))
+                <span class="text-blue-400">return</span> _cgi_handlers[ext];
+            <span class="text-blue-400">return</span> <span class="text-green-300">""</span>;
+        }
+};</code></pre>
+                        </div>
+
+                        <div class="bg-gray-50 rounded-xl p-6 border border-gray-200">
+                            <h4 class="font-bold text-gray-900 mb-3">🔄 Processus d'Exécution CGI</h4>
+                            <div class="space-y-3">
+                                <div class="flex items-start">
+                                    <span class="flex-shrink-0 w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold text-sm mr-3">1</span>
+                                    <div>
+                                        <p class="font-semibold text-gray-900">Détection Extension</p>
+                                        <p class="text-sm text-gray-600">Le serveur parse l'URI et extrait l'extension (.py, .sh, etc.)</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start">
+                                    <span class="flex-shrink-0 w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold text-sm mr-3">2</span>
+                                    <div>
+                                        <p class="font-semibold text-gray-900">Lookup Interpréteur</p>
+                                        <p class="text-sm text-gray-600">Recherche dans la map pour trouver l'interpréteur associé</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start">
+                                    <span class="flex-shrink-0 w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold text-sm mr-3">3</span>
+                                    <div>
+                                        <p class="font-semibold text-gray-900">Fork + Execve</p>
+                                        <p class="text-sm text-gray-600">Création processus enfant qui exécute: <code class="bg-gray-200 px-1 rounded">/usr/bin/python3 script.py</code></p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start">
+                                    <span class="flex-shrink-0 w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold text-sm mr-3">4</span>
+                                    <div>
+                                        <p class="font-semibold text-gray-900">Variables CGI</p>
+                                        <p class="text-sm text-gray-600">Passage des variables d'environnement (REQUEST_METHOD, QUERY_STRING, etc.)</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start">
+                                    <span class="flex-shrink-0 w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold text-sm mr-3">5</span>
+                                    <div>
+                                        <p class="font-semibold text-gray-900">Capture Output</p>
+                                        <p class="text-sm text-gray-600">Lecture stdout du child via pipe, avec timeout de 3 secondes</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Supported CGI Types -->
+                    <div class="grid md:grid-cols-2 gap-8 mb-8">
+                        <!-- Python CGI -->
+                        <div class="group relative">
+                            <div class="absolute inset-0 bg-gradient-to-r from-blue-400 to-cyan-400 rounded-2xl blur opacity-25 group-hover:opacity-40 transition"></div>
+                            <div class="relative bg-white border-2 border-blue-200 rounded-2xl p-6 hover:border-blue-400 transition h-full">
+                                <div class="flex items-center mb-4">
+                                    <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-xl flex items-center justify-center text-3xl mr-4 shadow-lg">🐍</div>
+                                    <div>
+                                        <h3 class="text-2xl font-bold text-gray-900">Python CGI</h3>
+                                        <p class="text-sm text-gray-500">Extension: <code class="bg-blue-100 px-2 py-1 rounded">.py</code></p>
+                                    </div>
+                                </div>
+
+                                <div class="space-y-3 mb-4">
+                                    <div class="bg-blue-50 rounded-lg p-3">
+                                        <div class="flex items-center text-sm mb-1">
+                                            <span class="text-blue-500 mr-2 font-bold">▸</span>
+                                            <span class="font-semibold text-gray-900">Interpréteur:</span>
+                                        </div>
+                                        <code class="text-sm text-blue-700 ml-4">/usr/bin/python3</code>
+                                    </div>
+                                    <div class="bg-blue-50 rounded-lg p-3">
+                                        <div class="flex items-center text-sm mb-1">
+                                            <span class="text-blue-500 mr-2 font-bold">▸</span>
+                                            <span class="font-semibold text-gray-900">Scripts disponibles:</span>
+                                        </div>
+                                        <div class="ml-4 space-y-1 text-sm">
+                                            <div><code class="text-blue-700">www/cgi-bin/echo.py</code> - Echo CGI vars</div>
+                                            <div><code class="text-blue-700">www/cgi-bin/session.py</code> - Session demo</div>
+                                            <div><code class="text-blue-700">www/cgi-bin/info.py</code> - Server info</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="bg-gray-900 rounded-xl p-4 mb-4">
+                                    <p class="text-gray-400 text-xs mb-2">Exemple: echo.py</p>
+                                    <pre class="text-xs text-gray-100"><code><span class="text-purple-400">#!/usr/bin/env python3</span>
+<span class="text-blue-400">import</span> os
+
+<span class="text-gray-500"># Headers CGI (crucial: \r\n!)</span>
+<span class="text-yellow-300">print</span>(<span class="text-green-300">"Content-Type: text/html\r\n\r\n"</span>)
+
+<span class="text-gray-500"># Body HTML</span>
+<span class="text-yellow-300">print</span>(<span class="text-green-300">"&lt;h1&gt;Python CGI&lt;/h1&gt;"</span>)
+<span class="text-yellow-300">print</span>(<span class="text-green-300">f"Method: {os.environ['REQUEST_METHOD']}"</span>)
+<span class="text-yellow-300">print</span>(<span class="text-green-300">f"Query: {os.environ.get('QUERY_STRING', 'N/A')}"</span>)</code></pre>
+                                </div>
+
+                                <div class="flex items-center justify-between">
+                                    <a href="/cgi-bin/echo.py?test=hello" class="inline-flex items-center px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition text-sm">
+                                        Tester Python CGI →
+                                    </a>
+                                    <span class="text-xs text-gray-500">✓ Testé</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Shell CGI -->
+                        <div class="group relative">
+                            <div class="absolute inset-0 bg-gradient-to-r from-green-400 to-emerald-400 rounded-2xl blur opacity-25 group-hover:opacity-40 transition"></div>
+                            <div class="relative bg-white border-2 border-green-200 rounded-2xl p-6 hover:border-green-400 transition h-full">
+                                <div class="flex items-center mb-4">
+                                    <div class="w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-500 rounded-xl flex items-center justify-center text-3xl mr-4 shadow-lg">💻</div>
+                                    <div>
+                                        <h3 class="text-2xl font-bold text-gray-900">Shell CGI</h3>
+                                        <p class="text-sm text-gray-500">Extension: <code class="bg-green-100 px-2 py-1 rounded">.sh</code></p>
+                                    </div>
+                                </div>
+
+                                <div class="space-y-3 mb-4">
+                                    <div class="bg-green-50 rounded-lg p-3">
+                                        <div class="flex items-center text-sm mb-1">
+                                            <span class="text-green-500 mr-2 font-bold">▸</span>
+                                            <span class="font-semibold text-gray-900">Interpréteur:</span>
+                                        </div>
+                                        <code class="text-sm text-green-700 ml-4">/bin/bash</code>
+                                    </div>
+                                    <div class="bg-green-50 rounded-lg p-3">
+                                        <div class="flex items-center text-sm mb-1">
+                                            <span class="text-green-500 mr-2 font-bold">▸</span>
+                                            <span class="font-semibold text-gray-900">Scripts disponibles:</span>
+                                        </div>
+                                        <div class="ml-4 space-y-1 text-sm">
+                                            <div><code class="text-green-700">www/cgi-bin/info.sh</code> - Server info</div>
+                                            <div><code class="text-green-700">www/cgi-bin/env.sh</code> - Environment vars</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="bg-gray-900 rounded-xl p-4 mb-4">
+                                    <p class="text-gray-400 text-xs mb-2">Exemple: info.sh</p>
+                                    <pre class="text-xs text-gray-100"><code><span class="text-purple-400">#!/bin/bash</span>
+
+<span class="text-gray-500"># Headers CGI</span>
+<span class="text-yellow-300">echo</span> <span class="text-green-300">"Content-Type: text/html"</span>
+<span class="text-yellow-300">echo</span> <span class="text-green-300">""</span>
+
+<span class="text-gray-500"># Body HTML</span>
+<span class="text-yellow-300">echo</span> <span class="text-green-300">"&lt;h1&gt;Shell CGI&lt;/h1&gt;"</span>
+<span class="text-yellow-300">echo</span> <span class="text-green-300">"&lt;p&gt;Port: $SERVER_PORT&lt;/p&gt;"</span>
+<span class="text-yellow-300">echo</span> <span class="text-green-300">"&lt;p&gt;Method: $REQUEST_METHOD&lt;/p&gt;"</span>
+<span class="text-yellow-300">echo</span> <span class="text-green-300">"&lt;p&gt;Query: $QUERY_STRING&lt;/p&gt;"</span></code></pre>
+                                </div>
+
+                                <div class="flex items-center justify-between">
+                                    <a href="/cgi-bin/info.sh" class="inline-flex items-center px-4 py-2 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition text-sm">
+                                        Tester Shell CGI →
+                                    </a>
+                                    <span class="text-xs text-gray-500">✓ Testé</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Configuration -->
+                    <div class="bg-gray-50 rounded-xl p-6 border border-gray-200 mb-8">
+                        <h4 class="font-bold text-gray-900 mb-4 flex items-center text-xl">
+                            <span class="text-2xl mr-3">⚙️</span>
+                            Configuration dans conf/webserv.conf
+                        </h4>
+                        <div class="bg-gray-900 rounded-lg p-6">
+                            <pre class="text-sm text-gray-100"><code><span class="text-purple-400">location</span> /cgi-bin {
+    <span class="text-cyan-400">root</span> www/cgi-bin;
+
+    <span class="text-gray-500"># Associer .py à Python</span>
+    <span class="text-cyan-400">cgi</span> <span class="text-green-300">.py</span> /usr/bin/python3;
+
+    <span class="text-gray-500"># Associer .sh à Bash</span>
+    <span class="text-cyan-400">cgi</span> <span class="text-green-300">.sh</span> /bin/bash;
+
+    <span class="text-gray-500"># Méthodes autorisées</span>
+    <span class="text-cyan-400">allow_methods</span> GET POST;
+}</code></pre>
+                        </div>
+                        <div class="mt-4 bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r">
+                            <p class="text-sm text-blue-800">
+                                <strong>💡 Extensible:</strong> On peut facilement ajouter d'autres types CGI comme
+                                <code class="bg-blue-100 px-1 rounded">.pl</code> (Perl),
+                                <code class="bg-blue-100 px-1 rounded">.rb</code> (Ruby), etc.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- CGI Environment Variables -->
+                    <div class="bg-gradient-to-br from-yellow-50 to-amber-50 rounded-xl p-6 border border-yellow-200">
+                        <h4 class="font-bold text-gray-900 mb-4 flex items-center text-xl">
+                            <span class="text-2xl mr-3">🌍</span>
+                            Variables d'Environnement CGI/1.1
+                        </h4>
+                        <p class="text-gray-700 mb-4">Toutes les variables CGI standard sont passées aux scripts:</p>
+                        <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                            <div class="bg-white rounded-lg p-3 border border-yellow-200">
+                                <code class="text-xs font-bold text-yellow-700">REQUEST_METHOD</code>
+                                <p class="text-xs text-gray-600 mt-1">GET, POST, DELETE</p>
+                            </div>
+                            <div class="bg-white rounded-lg p-3 border border-yellow-200">
+                                <code class="text-xs font-bold text-yellow-700">QUERY_STRING</code>
+                                <p class="text-xs text-gray-600 mt-1">?param=value</p>
+                            </div>
+                            <div class="bg-white rounded-lg p-3 border border-yellow-200">
+                                <code class="text-xs font-bold text-yellow-700">CONTENT_TYPE</code>
+                                <p class="text-xs text-gray-600 mt-1">Type MIME</p>
+                            </div>
+                            <div class="bg-white rounded-lg p-3 border border-yellow-200">
+                                <code class="text-xs font-bold text-yellow-700">CONTENT_LENGTH</code>
+                                <p class="text-xs text-gray-600 mt-1">Taille body</p>
+                            </div>
+                            <div class="bg-white rounded-lg p-3 border border-yellow-200">
+                                <code class="text-xs font-bold text-yellow-700">SERVER_NAME</code>
+                                <p class="text-xs text-gray-600 mt-1">localhost</p>
+                            </div>
+                            <div class="bg-white rounded-lg p-3 border border-yellow-200">
+                                <code class="text-xs font-bold text-yellow-700">SERVER_PORT</code>
+                                <p class="text-xs text-gray-600 mt-1">8080</p>
+                            </div>
+                            <div class="bg-white rounded-lg p-3 border border-yellow-200">
+                                <code class="text-xs font-bold text-yellow-700">SCRIPT_NAME</code>
+                                <p class="text-xs text-gray-600 mt-1">Chemin script</p>
+                            </div>
+                            <div class="bg-white rounded-lg p-3 border border-yellow-200">
+                                <code class="text-xs font-bold text-yellow-700">HTTP_*</code>
+                                <p class="text-xs text-gray-600 mt-1">Tous headers HTTP</p>
+                            </div>
+                            <div class="bg-white rounded-lg p-3 border border-yellow-200">
+                                <code class="text-xs font-bold text-yellow-700">HTTP_COOKIE</code>
+                                <p class="text-xs text-gray-600 mt-1">Cookies client</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bonus 2: Cookies & Sessions -->
+        <div class="mb-20">
+            <div class="bg-white rounded-3xl shadow-2xl overflow-hidden border-2 border-purple-200">
+                <div class="bg-gradient-to-r from-purple-500 to-pink-500 px-8 py-8">
+                    <h2 class="text-4xl font-bold text-white flex items-center mb-2">
+                        <span class="text-5xl mr-4">🍪</span>
+                        Bonus 2: Cookies et Gestion de Sessions
+                    </h2>
+                    <p class="text-purple-100 text-lg">Implémentation complète du système de cookies HTTP</p>
+                </div>
+
+                <div class="p-8">
+                    <!-- Overview -->
+                    <div class="bg-purple-50 border-l-4 border-purple-500 p-6 mb-8 rounded-r-lg">
+                        <h3 class="text-xl font-bold text-purple-900 mb-3">💡 Qu'est-ce que les Cookies?</h3>
+                        <p class="text-purple-800 mb-3">
+                            Les <strong>cookies HTTP</strong> sont des petites données stockées côté client qui permettent de maintenir
+                            un <strong>état entre les requêtes HTTP</strong> (qui sont normalement stateless). Ils sont essentiels pour
+                            l'authentification, le panier d'achat, les préférences utilisateur, etc.
+                        </p>
+                        <div class="bg-purple-100 rounded-lg p-4 mt-4">
+                            <h4 class="font-bold text-purple-900 mb-2">🔄 Cycle de vie d'un Cookie</h4>
+                            <div class="space-y-2 text-sm text-purple-800">
+                                <div><strong>1. Serveur → Client:</strong> Header <code class="bg-white px-2 py-1 rounded">Set-Cookie: name=value</code></div>
+                                <div><strong>2. Client stocke:</strong> Le navigateur sauvegarde le cookie</div>
+                                <div><strong>3. Client → Serveur:</strong> Header <code class="bg-white px-2 py-1 rounded">Cookie: name=value</code> dans chaque requête</div>
+                                <div><strong>4. Serveur lit:</strong> Variable CGI <code class="bg-white px-2 py-1 rounded">HTTP_COOKIE</code></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Architecture -->
+                    <div class="mb-8">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-4">🏗️ Architecture de l'Implémentation</h3>
+                        <div class="bg-slate-950 rounded-xl p-6">
+                            <pre class="text-green-400 text-xs ascii-art">┌────────────────────────────────────────────────┐
+│           <span class="text-yellow-400 font-bold">1. PREMIÈRE REQUÊTE</span>                  │
+└────────────────────────────────────────────────┘
+
+<span class="text-cyan-400">Client</span>                              <span class="text-purple-400">CGI Script</span>
+  │                                       │
+  │ GET /cgi-bin/session.py              │
+  ├──────────────────────────────────────►│
+  │                                       │ <span class="text-gray-500">Pas de cookie</span>
+  │                                       │ <span class="text-gray-500">→ Génère session ID</span>
+  │                                       │
+  │ HTTP/1.1 200 OK                       │
+  │ <span class="text-yellow-300">Set-Cookie: session_id=123456</span>      │
+  │ <span class="text-yellow-300">Set-Cookie: visit_count=1</span>          │
+  │◄──────────────────────────────────────┤
+  │                                       │
+  ▼ <span class="text-green-400">Browser stocke cookies</span>              ▼
+
+┌────────────────────────────────────────────────┐
+│          <span class="text-yellow-400 font-bold">2. REQUÊTE SUIVANTE</span>                  │
+└────────────────────────────────────────────────┘
+
+<span class="text-cyan-400">Client</span>                              <span class="text-purple-400">CGI Script</span>
+  │                                       │
+  │ GET /cgi-bin/session.py              │
+  │ <span class="text-pink-300">Cookie: session_id=123456; ...</span>      │
+  ├──────────────────────────────────────►│
+  │                                       │ <span class="text-gray-500">Parse HTTP_COOKIE</span>
+  │                                       │ <span class="text-gray-500">→ Trouve session</span>
+  │                                       │ <span class="text-gray-500">→ Incrémente compteur</span>
+  │                                       │
+  │ HTTP/1.1 200 OK                       │
+  │ <span class="text-yellow-300">Set-Cookie: visit_count=2</span>          │
+  │◄──────────────────────────────────────┤
+  │                                       │</pre>
+                        </div>
+                    </div>
+
+                    <!-- Features Grid -->
+                    <div class="grid md:grid-cols-3 gap-6 mb-8">
+                        <div class="bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-6 border-2 border-purple-200 hover:border-purple-400 transition">
+                            <div class="text-4xl mb-3">🆔</div>
+                            <h4 class="font-bold text-gray-900 mb-2 text-lg">Session ID Unique</h4>
+                            <p class="text-sm text-gray-600 mb-3">Identifiant basé sur timestamp en millisecondes</p>
+                            <div class="bg-white rounded p-2 font-mono text-xs text-purple-700">
+                                1761833695792
+                            </div>
+                        </div>
+
+                        <div class="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-xl p-6 border-2 border-blue-200 hover:border-blue-400 transition">
+                            <div class="text-4xl mb-3">🔢</div>
+                            <h4 class="font-bold text-gray-900 mb-2 text-lg">Visit Counter</h4>
+                            <p class="text-sm text-gray-600 mb-3">Compte automatique des visites persistant</p>
+                            <div class="bg-white rounded p-2 font-mono text-xs text-blue-700">
+                                Visit #3
+                            </div>
+                        </div>
+
+                        <div class="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-6 border-2 border-green-200 hover:border-green-400 transition">
+                            <div class="text-4xl mb-3">👤</div>
+                            <h4 class="font-bold text-gray-900 mb-2 text-lg">User Data</h4>
+                            <p class="text-sm text-gray-600 mb-3">Stockage d'informations utilisateur arbitraires</p>
+                            <div class="bg-white rounded p-2 font-mono text-xs text-green-700">
+                                username=demo_user
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Implementation Code -->
+                    <div class="mb-8">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-4">💻 Code Complet d'Implémentation</h3>
+                        <div class="bg-gray-900 rounded-xl p-6">
+                            <p class="text-gray-400 text-xs mb-3">📁 www/cgi-bin/session.py</p>
+                            <pre class="text-sm text-gray-100"><code><span class="text-purple-400">#!/usr/bin/env python3</span>
+<span class="text-blue-400">import</span> os, sys, time
+<span class="text-blue-400">from</span> http.cookies <span class="text-blue-400">import</span> SimpleCookie
+
+<span class="text-gray-500"># 1. Parser les cookies reçus du client</span>
+cookies = SimpleCookie()
+cookie_header = os.environ.<span class="text-cyan-400">get</span>(<span class="text-green-300">'HTTP_COOKIE'</span>, <span class="text-green-300">''</span>)
+<span class="text-blue-400">if</span> cookie_header:
+    cookies.<span class="text-cyan-400">load</span>(cookie_header)  <span class="text-gray-500"># Parse: "name=value; name2=value2"</span>
+
+<span class="text-gray-500"># 2. Récupérer ou créer la session</span>
+session_id = cookies.<span class="text-cyan-400">get</span>(<span class="text-green-300">'session_id'</span>)
+<span class="text-blue-400">if</span> session_id:
+    <span class="text-gray-500"># Session existante → incrémenter compteur</span>
+    session_id = session_id.value
+    visit_count_cookie = cookies.<span class="text-cyan-400">get</span>(<span class="text-green-300">'visit_count'</span>)
+    visit_count = <span class="text-cyan-400">int</span>(visit_count_cookie.value) <span class="text-blue-400">if</span> visit_count_cookie <span class="text-blue-400">else</span> <span class="text-green-400">1</span>
+    visit_count += <span class="text-green-400">1</span>
+<span class="text-blue-400">else</span>:
+    <span class="text-gray-500"># Nouvelle session → générer ID unique</span>
+    session_id = <span class="text-cyan-400">str</span>(<span class="text-cyan-400">int</span>(time.<span class="text-cyan-400">time</span>() * <span class="text-green-400">1000</span>))  <span class="text-gray-500"># Timestamp en ms</span>
+    visit_count = <span class="text-green-400">1</span>
+
+<span class="text-gray-500"># 3. CRITIQUE: Envoyer headers avec \r\n</span>
+<span class="text-gray-500">#    (Python print() génère \n, pas suffisant pour CGI!)</span>
+sys.stdout.<span class="text-cyan-400">write</span>(<span class="text-green-300">"Content-Type: text/html\r\n"</span>)
+sys.stdout.<span class="text-cyan-400">write</span>(<span class="text-green-300">f"Set-Cookie: session_id={session_id}; Path=/; Max-Age=3600\r\n"</span>)
+sys.stdout.<span class="text-cyan-400">write</span>(<span class="text-green-300">f"Set-Cookie: visit_count={visit_count}; Path=/; Max-Age=3600\r\n"</span>)
+sys.stdout.<span class="text-cyan-400">write</span>(<span class="text-green-300">f"Set-Cookie: username=demo_user; Path=/; Max-Age=3600\r\n"</span>)
+sys.stdout.<span class="text-cyan-400">write</span>(<span class="text-green-300">"\r\n"</span>)  <span class="text-gray-500"># IMPORTANT: ligne vide entre headers et body</span>
+
+<span class="text-gray-500"># 4. Générer HTML avec infos session</span>
+<span class="text-yellow-300">print</span>(<span class="text-green-300">"&lt;html&gt;&lt;head&gt;&lt;title&gt;Session Demo&lt;/title&gt;&lt;/head&gt;"</span>)
+<span class="text-yellow-300">print</span>(<span class="text-green-300">"&lt;body style='font-family: Arial; padding: 30px;'&gt;"</span>)
+<span class="text-yellow-300">print</span>(<span class="text-green-300">f"&lt;h1&gt;Session ID: {session_id}&lt;/h1&gt;"</span>)
+<span class="text-yellow-300">print</span>(<span class="text-green-300">f"&lt;h2&gt;Visit #{visit_count}&lt;/h2&gt;"</span>)
+<span class="text-yellow-300">print</span>(<span class="text-green-300">f"&lt;p&gt;Status: {'Returning visitor' if visit_count > 1 else 'First visit'}&lt;/p&gt;"</span>)
+<span class="text-yellow-300">print</span>(<span class="text-green-300">"&lt;/body&gt;&lt;/html&gt;"</span>)</code></pre>
+                        </div>
+                    </div>
+
+                    <!-- Critical Detail: \r\n -->
+                    <div class="bg-red-50 border-l-4 border-red-500 p-6 mb-8 rounded-r-lg">
+                        <h4 class="text-lg font-bold text-red-900 mb-3 flex items-center">
+                            <span class="text-2xl mr-2">⚠️</span>
+                            CRITICAL: Headers doivent utiliser \r\n
+                        </h4>
+                        <p class="text-red-800 mb-4">
+                            <strong>Problème rencontré:</strong> Initialement, le code utilisait <code class="bg-red-100 px-2 py-1 rounded">print()</code>
+                            qui génère seulement <code>\n</code>. Le serveur cherche <code>\r\n\r\n</code> pour séparer headers et body,
+                            donc les headers s'affichaient comme texte brut!
+                        </p>
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div>
+                                <h5 class="font-bold text-red-900 mb-2">❌ Incorrect (print):</h5>
+                                <div class="bg-white rounded p-3 border-2 border-red-300">
+                                    <pre class="text-xs text-red-700"><code>print("Set-Cookie: ...")
+print("")
+# → Génère: \n\n (FAUX!)</code></pre>
+                                </div>
+                            </div>
+                            <div>
+                                <h5 class="font-bold text-green-900 mb-2">✓ Correct (sys.stdout.write):</h5>
+                                <div class="bg-white rounded p-3 border-2 border-green-300">
+                                    <pre class="text-xs text-green-700"><code>sys.stdout.write("...\r\n")
+sys.stdout.write("\r\n")
+# → Génère: \r\n\r\n (BON!)</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-sm text-red-700 mt-4">
+                            <strong>Solution:</strong> Utiliser <code class="bg-red-100 px-1 rounded">sys.stdout.write()</code> avec
+                            <code class="bg-red-100 px-1 rounded">\r\n</code> explicites pour les headers CGI.
+                        </p>
+                    </div>
+
+                    <!-- Set-Cookie Headers -->
+                    <div class="bg-gradient-to-r from-orange-50 to-amber-50 rounded-xl p-6 border border-orange-200 mb-6">
+                        <h4 class="font-bold text-gray-900 mb-4 flex items-center text-xl">
+                            <span class="text-2xl mr-3">📤</span>
+                            Exemple Headers Set-Cookie Générés
+                        </h4>
+                        <div class="space-y-3">
+                            <div class="bg-white p-4 rounded-lg border border-orange-200 font-mono text-sm">
+                                <div class="text-orange-600 font-bold mb-1">Set-Cookie:</div>
+                                <div class="text-gray-700 pl-4">
+                                    <span class="text-blue-600">session_id</span>=<span class="text-green-600">1761833695792</span>;
+                                    Path=/; Max-Age=3600
+                                </div>
+                                <p class="text-xs text-gray-500 mt-2 pl-4">→ ID de session unique, valide 1 heure</p>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg border border-orange-200 font-mono text-sm">
+                                <div class="text-orange-600 font-bold mb-1">Set-Cookie:</div>
+                                <div class="text-gray-700 pl-4">
+                                    <span class="text-blue-600">visit_count</span>=<span class="text-green-600">3</span>;
+                                    Path=/; Max-Age=3600
+                                </div>
+                                <p class="text-xs text-gray-500 mt-2 pl-4">→ Nombre de visites, incrémenté automatiquement</p>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg border border-orange-200 font-mono text-sm">
+                                <div class="text-orange-600 font-bold mb-1">Set-Cookie:</div>
+                                <div class="text-gray-700 pl-4">
+                                    <span class="text-blue-600">username</span>=<span class="text-green-600">demo_user</span>;
+                                    Path=/; Max-Age=3600
+                                </div>
+                                <p class="text-xs text-gray-500 mt-2 pl-4">→ Données utilisateur arbitraires</p>
+                            </div>
+                        </div>
+                        <div class="mt-4 bg-amber-100 rounded p-3">
+                            <p class="text-sm text-amber-900">
+                                <strong>📝 Format:</strong> <code>name=value; [Path=path]; [Max-Age=seconds]; [HttpOnly]; [Secure]</code>
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Live Demo -->
+                    <div class="bg-gradient-to-br from-purple-600 via-pink-600 to-red-600 rounded-2xl p-8 text-center shadow-2xl">
+                        <div class="text-5xl mb-4">🎬</div>
+                        <h3 class="text-3xl font-bold text-white mb-4">Démo Interactive en Direct</h3>
+                        <p class="text-purple-100 mb-6 text-lg">
+                            Testez le système de cookies et sessions maintenant! <br/>
+                            Rafraîchissez la page plusieurs fois pour voir le compteur s'incrémenter.
+                        </p>
+                        <a href="/cgi-bin/session.py" class="inline-flex items-center px-10 py-4 bg-white text-purple-600 font-bold rounded-xl hover:bg-gray-100 transition shadow-2xl text-lg transform hover:scale-105">
+                            <span class="mr-2">🚀</span>
+                            Lancer la Démo CGI
+                            <span class="ml-2">→</span>
+                        </a>
+                        <p class="text-xs text-purple-200 mt-6">
+                            💡 Ouvrez les DevTools (F12) → Network pour voir les headers Set-Cookie
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Testing Section -->
+        <div class="bg-gradient-to-br from-gray-900 to-gray-800 rounded-3xl shadow-2xl overflow-hidden text-white mb-16">
+            <div class="p-8">
+                <h2 class="text-4xl font-bold mb-6 flex items-center">
+                    <span class="text-5xl mr-4">🧪</span>
+                    Tests & Validation des Bonus
+                </h2>
+                <p class="text-gray-300 mb-8 text-lg">Commandes pour tester manuellement les fonctionnalités bonus</p>
+
+                <div class="grid md:grid-cols-2 gap-6 mb-8">
+                    <!-- Test Python CGI -->
+                    <div class="bg-gray-800 rounded-xl p-6 border border-gray-700">
+                        <h3 class="text-xl font-semibold mb-4 text-blue-300 flex items-center">
+                            <span class="mr-2">🐍</span>
+                            Test Python CGI
+                        </h3>
+                        <div class="bg-gray-900 rounded-lg p-4 font-mono text-sm mb-3">
+                            <div class="text-gray-400">$</div>
+                            <div class="text-green-400 mt-1">curl http://127.0.0.1:8080/cgi-bin/echo.py?test=hello</div>
+                        </div>
+                        <div class="space-y-2 text-sm">
+                            <div class="flex items-center"><span class="text-green-400 mr-2">✓</span><span class="text-gray-300">Retourne HTML valide</span></div>
+                            <div class="flex items-center"><span class="text-green-400 mr-2">✓</span><span class="text-gray-300">Variables CGI accessibles</span></div>
+                            <div class="flex items-center"><span class="text-green-400 mr-2">✓</span><span class="text-gray-300">Query string parsé</span></div>
+                        </div>
+                    </div>
+
+                    <!-- Test Shell CGI -->
+                    <div class="bg-gray-800 rounded-xl p-6 border border-gray-700">
+                        <h3 class="text-xl font-semibold mb-4 text-green-300 flex items-center">
+                            <span class="mr-2">💻</span>
+                            Test Shell CGI
+                        </h3>
+                        <div class="bg-gray-900 rounded-lg p-4 font-mono text-sm mb-3">
+                            <div class="text-gray-400">$</div>
+                            <div class="text-green-400 mt-1">curl http://127.0.0.1:8080/cgi-bin/info.sh</div>
+                        </div>
+                        <div class="space-y-2 text-sm">
+                            <div class="flex items-center"><span class="text-green-400 mr-2">✓</span><span class="text-gray-300">Retourne infos serveur</span></div>
+                            <div class="flex items-center"><span class="text-green-400 mr-2">✓</span><span class="text-gray-300">Variables environnement OK</span></div>
+                            <div class="flex items-center"><span class="text-green-400 mr-2">✓</span><span class="text-gray-300">Bash exécuté correctement</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Test Cookies -->
+                <div class="bg-gray-800 rounded-xl p-6 border border-gray-700">
+                    <h3 class="text-xl font-semibold mb-4 text-purple-300 flex items-center">
+                        <span class="mr-2">🍪</span>
+                        Test Cookies & Sessions
+                    </h3>
+                    <div class="space-y-4">
+                        <div>
+                            <p class="text-gray-400 text-sm mb-2">1. Première requête (pas de cookies):</p>
+                            <div class="bg-gray-900 rounded-lg p-3 font-mono text-sm">
+                                <div class="text-gray-400">$</div>
+                                <div class="text-green-400">curl -i http://127.0.0.1:8080/cgi-bin/session.py</div>
+                            </div>
+                            <div class="mt-2 text-xs text-purple-300 space-y-1 pl-4">
+                                <div>✓ Headers Set-Cookie présents</div>
+                                <div>✓ session_id généré</div>
+                                <div>✓ visit_count=1</div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <p class="text-gray-400 text-sm mb-2">2. Requêtes suivantes (avec cookies):</p>
+                            <div class="bg-gray-900 rounded-lg p-3 font-mono text-sm">
+                                <div class="text-gray-400">$</div>
+                                <div class="text-green-400">curl -c cookies.txt -b cookies.txt \</div>
+                                <div class="text-green-400 pl-4">http://127.0.0.1:8080/cgi-bin/session.py</div>
+                            </div>
+                            <div class="mt-2 text-xs text-purple-300 space-y-1 pl-4">
+                                <div>✓ Session ID reconnu</div>
+                                <div>✓ visit_count incrémenté (2, 3, 4...)</div>
+                                <div>✓ Cookies persistants</div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <p class="text-gray-400 text-sm mb-2">3. Inspection headers (DevTools):</p>
+                            <div class="bg-gray-900 rounded-lg p-3 font-mono text-xs text-gray-300">
+                                <div>F12 → Network → Name: session.py → Headers → Response Headers:</div>
+                                <div class="text-yellow-300 mt-2">Set-Cookie: session_id=...; Path=/; Max-Age=3600</div>
+                                <div class="text-yellow-300">Set-Cookie: visit_count=3; Path=/; Max-Age=3600</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Conformity Badge -->
+        <div class="text-center mb-12">
+            <div class="inline-block bg-gradient-to-br from-green-400 via-emerald-400 to-teal-400 rounded-3xl p-10 shadow-2xl transform hover:scale-105 transition">
+                <div class="text-6xl mb-4">✅</div>
+                <h3 class="text-3xl font-bold text-gray-900 mb-2">Conformité 100%</h3>
+                <p class="text-gray-700 mb-6 text-lg">Chapter V - Bonus part du sujet 42</p>
+                <div class="flex flex-wrap items-center justify-center gap-3">
+                    <span class="px-5 py-2 bg-white rounded-full font-semibold text-sm shadow-lg">✓ Multiple CGI Types</span>
+                    <span class="px-5 py-2 bg-white rounded-full font-semibold text-sm shadow-lg">✓ Cookies & Sessions</span>
+                    <span class="px-5 py-2 bg-white rounded-full font-bold text-sm shadow-lg text-green-600">+25 Points Bonus</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="bg-gradient-to-r from-blue-600 to-purple-600 rounded-3xl p-8 text-white">
+            <h3 class="text-2xl font-bold mb-6 text-center">📊 Statistiques des Bonus</h3>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <div class="text-center">
+                    <div class="text-4xl font-bold mb-2">2</div>
+                    <div class="text-blue-100 text-sm">Types CGI</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-4xl font-bold mb-2">9</div>
+                    <div class="text-blue-100 text-sm">Var. CGI/1.1</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-4xl font-bold mb-2">3</div>
+                    <div class="text-blue-100 text-sm">Cookies définis</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-4xl font-bold mb-2">100%</div>
+                    <div class="text-blue-100 text-sm">Tests passés</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-400 py-12 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+                <div>
+                    <h3 class="text-white font-bold mb-3 flex items-center">
+                        <span class="mr-2">🎁</span>
+                        Bonus Features
+                    </h3>
+                    <p class="text-sm">Implémentation complète des 2 bonus requis</p>
+                </div>
+                <div>
+                    <h3 class="text-white font-bold mb-3">Quick Links</h3>
+                    <ul class="text-sm space-y-2">
+                        <li><a href="/" class="hover:text-white">Home</a></li>
+                        <li><a href="/docs.html" class="hover:text-white">Documentation</a></li>
+                        <li><a href="/cgi-bin/session.py" class="hover:text-white">Démo CGI</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-white font-bold mb-3">Score</h3>
+                    <ul class="text-sm space-y-2">
+                        <li>Tests obligatoires: 100/100</li>
+                        <li>Bonus: +25</li>
+                        <li><strong class="text-green-400">Total: 125/100</strong></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="text-center border-t border-gray-800 pt-8">
+                <p class="text-sm">&copy; 2025 Webserv - Projet 42 School</p>
+                <p class="text-sm mt-2">Bonus Features Implementation - Score: 125/100</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

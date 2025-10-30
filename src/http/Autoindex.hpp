@@ -1,13 +1,7 @@
 #ifndef AUTOINDEX_HPP
 #define AUTOINDEX_HPP
 
-#include <string>
-#include <sstream>
-#include <dirent.h>
-#include <sys/stat.h>
-#include <ctime>
-#include <iomanip>
-#include <iostream>
+#include "../common.hpp"
 
 class Autoindex {
 public:

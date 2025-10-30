@@ -1,17 +1,17 @@
-#include <csignal>
-#include <cstdlib>
+#include "common.hpp"
 #include "server/Server.hpp"
 #include "config/ConfigParser.hpp"
-#include "server/Server.hpp"
 #include "server/PollManager.hpp"
 
 Server *g_srv = NULL;
+PollManager *g_poll = NULL;
 
 void handle_sigint(int) {
     std::cout << "\n[Signal] SIGINT received — shutting down..." << std::endl;
+    if (g_poll)
+        g_poll->stop();
     if (g_srv)
         g_srv->stop();
-    exit(0);
 }
 
 int main(int argc, char **argv) {
@@ -40,6 +40,8 @@ int main(int argc, char **argv) {
 
     // --- 4. Boucle principale ---
     PollManager poll;
+    g_poll = &poll;
+
     std::vector<int> sockets = srv.getListeningSockets();
     const std::vector<ServerConfig>& configs = srv.getConfigs();
 
@@ -52,5 +54,6 @@ int main(int argc, char **argv) {
 
     poll.loop();
 
+    std::cout << "[Main] Cleanup complete. Exiting." << std::endl;
     return 0;
 }

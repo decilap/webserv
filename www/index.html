@@ -1,64 +1,203 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr" class="scroll-smooth">
 <head>
-  <meta charset="UTF-8">
-  <title>Webserv 42 - File Upload</title>
-  <style>
-    body {
-      background-color: #1e1e1e;
-      color: white;
-      text-align: center;
-      font-family: Arial, sans-serif;
-      padding: 50px;
-    }
-    .upload-form {
-      background-color: #2d2d2d;
-      border-radius: 10px;
-      padding: 30px;
-      max-width: 500px;
-      margin: 0 auto;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-    }
-    input[type="file"] {
-      margin: 20px 0;
-      padding: 10px;
-      background-color: #3d3d3d;
-      color: white;
-      border: 1px solid #555;
-      border-radius: 5px;
-      width: 100%;
-    }
-    input[type="submit"] {
-      background-color: #4CAF50;
-      color: white;
-      padding: 12px 30px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 16px;
-    }
-    input[type="submit"]:hover {
-      background-color: #45a049;
-    }
-    .info {
-      margin-top: 20px;
-      font-size: 14px;
-      color: #aaa;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webserv - HTTP Server Documentation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-  <h1>Hello from Webserv 42!</h1>
-  <div class="upload-form">
-    <h2>Upload a File</h2>
-    <form action="/upload" method="POST" enctype="multipart/form-data">
-      <input type="file" name="file" id="fileInput" required />
-      <br>
-      <input type="submit" value="Upload File">
-    </form>
-    <div class="info">
-      <p>Selected file will be uploaded to www/upload/</p>
+<body class="bg-white">
+    <!-- Navigation -->
+    <nav class="fixed w-full bg-white/80 backdrop-blur-md border-b border-gray-200 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center space-x-8">
+                    <a href="/" class="flex items-center space-x-2">
+                        <span class="text-2xl">🌐</span>
+                        <span class="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Webserv</span>
+                    </a>
+                    <div class="hidden md:flex space-x-1">
+                        <a href="/" class="px-3 py-2 rounded-md text-sm font-medium text-gray-900 bg-gray-100">Home</a>
+                        <a href="/docs.html" class="px-3 py-2 rounded-md text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100">Documentation</a>
+                        <a href="/bonus.html" class="px-3 py-2 rounded-md text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100">Bonus</a>
+                        <a href="/cgi-bin/session.py" class="px-3 py-2 rounded-md text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100">Demo CGI</a>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span class="px-3 py-1 bg-green-100 text-green-800 text-xs font-semibold rounded-full">Tests: 16/16</span>
+                    <span class="px-3 py-1 bg-blue-100 text-blue-800 text-xs font-semibold rounded-full">C++98</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="relative overflow-hidden pt-16">
+        <div class="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-purple-50"></div>
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 sm:py-32">
+            <div class="text-center">
+                <h1 class="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight">
+                    <span class="block text-gray-900">HTTP Server in</span>
+                    <span class="block bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">C++98</span>
+                </h1>
+                <p class="mt-6 max-w-2xl mx-auto text-xl text-gray-600">
+                    Un serveur HTTP haute performance implémentant RFC 7230 avec I/O non-bloquant,
+                    support CGI et gestion multi-serveurs
+                </p>
+                <div class="mt-10 flex justify-center gap-4">
+                    <a href="/docs.html" class="px-8 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition shadow-lg">
+                        Get Started
+                    </a>
+                    <a href="https://github.com" class="px-8 py-3 bg-white text-gray-900 font-semibold rounded-lg hover:bg-gray-50 transition border border-gray-300">
+                        View on GitHub
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
+
+    <!-- Features Grid -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+        <div class="text-center mb-16">
+            <h2 class="text-3xl sm:text-4xl font-bold text-gray-900">Fonctionnalités Principales</h2>
+            <p class="mt-4 text-lg text-gray-600">Un serveur web complet et conforme aux standards</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Feature 1 -->
+            <div class="group relative p-8 bg-white rounded-2xl border border-gray-200 hover:border-blue-500 hover:shadow-xl transition">
+                <div class="text-4xl mb-4">⚡</div>
+                <h3 class="text-xl font-semibold text-gray-900 mb-2">I/O Non-Bloquant</h3>
+                <p class="text-gray-600">Utilisation de poll() pour gérer plusieurs connexions simultanées de manière efficace</p>
+                <div class="absolute inset-0 bg-gradient-to-br from-blue-50 to-transparent opacity-0 group-hover:opacity-100 transition rounded-2xl -z-10"></div>
+            </div>
+
+            <!-- Feature 2 -->
+            <div class="group relative p-8 bg-white rounded-2xl border border-gray-200 hover:border-blue-500 hover:shadow-xl transition">
+                <div class="text-4xl mb-4">🔧</div>
+                <h3 class="text-xl font-semibold text-gray-900 mb-2">Méthodes HTTP</h3>
+                <p class="text-gray-600">Support complet de GET, POST et DELETE avec validation stricte RFC 7230</p>
+                <div class="absolute inset-0 bg-gradient-to-br from-purple-50 to-transparent opacity-0 group-hover:opacity-100 transition rounded-2xl -z-10"></div>
+            </div>
+
+            <!-- Feature 3 -->
+            <div class="group relative p-8 bg-white rounded-2xl border border-gray-200 hover:border-blue-500 hover:shadow-xl transition">
+                <div class="text-4xl mb-4">📁</div>
+                <h3 class="text-xl font-semibold text-gray-900 mb-2">Fichiers Statiques</h3>
+                <p class="text-gray-600">Serveur de fichiers avec support MIME types et autoindex dynamique</p>
+                <div class="absolute inset-0 bg-gradient-to-br from-green-50 to-transparent opacity-0 group-hover:opacity-100 transition rounded-2xl -z-10"></div>
+            </div>
+
+            <!-- Feature 4 -->
+            <div class="group relative p-8 bg-white rounded-2xl border border-gray-200 hover:border-blue-500 hover:shadow-xl transition">
+                <div class="text-4xl mb-4">🚀</div>
+                <h3 class="text-xl font-semibold text-gray-900 mb-2">CGI Support</h3>
+                <p class="text-gray-600">Exécution de scripts Python et Shell avec variables d'environnement CGI/1.1</p>
+                <div class="absolute inset-0 bg-gradient-to-br from-yellow-50 to-transparent opacity-0 group-hover:opacity-100 transition rounded-2xl -z-10"></div>
+            </div>
+
+            <!-- Feature 5 -->
+            <div class="group relative p-8 bg-white rounded-2xl border border-gray-200 hover:border-blue-500 hover:shadow-xl transition">
+                <div class="text-4xl mb-4">🔄</div>
+                <h3 class="text-xl font-semibold text-gray-900 mb-2">Redirections HTTP</h3>
+                <p class="text-gray-600">Support des redirections 301/302/303 configurables par route</p>
+                <div class="absolute inset-0 bg-gradient-to-br from-red-50 to-transparent opacity-0 group-hover:opacity-100 transition rounded-2xl -z-10"></div>
+            </div>
+
+            <!-- Feature 6 -->
+            <div class="group relative p-8 bg-white rounded-2xl border border-gray-200 hover:border-blue-500 hover:shadow-xl transition">
+                <div class="text-4xl mb-4">🗂️</div>
+                <h3 class="text-xl font-semibold text-gray-900 mb-2">Upload de Fichiers</h3>
+                <p class="text-gray-600">Gestion multipart/form-data avec limite de taille configurable</p>
+                <div class="absolute inset-0 bg-gradient-to-br from-indigo-50 to-transparent opacity-0 group-hover:opacity-100 transition rounded-2xl -z-10"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Architecture Section -->
+    <div class="bg-gray-50 py-24">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl sm:text-4xl font-bold text-gray-900">Architecture du Projet</h2>
+                <p class="mt-4 text-lg text-gray-600">Une architecture modulaire et extensible</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="bg-white p-6 rounded-xl border-l-4 border-blue-600 shadow-sm hover:shadow-md transition">
+                    <h3 class="text-lg font-bold text-gray-900 mb-2">🎯 PollManager</h3>
+                    <p class="text-gray-600 text-sm mb-3">Boucle événementielle principale utilisant poll() pour multiplexer les I/O</p>
+                    <code class="text-xs bg-gray-100 px-2 py-1 rounded text-gray-700">src/server/PollManager.cpp</code>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl border-l-4 border-purple-600 shadow-sm hover:shadow-md transition">
+                    <h3 class="text-lg font-bold text-gray-900 mb-2">🖥️ Server</h3>
+                    <p class="text-gray-600 text-sm mb-3">Gère les sockets d'écoute et la création de clients pour chaque connexion</p>
+                    <code class="text-xs bg-gray-100 px-2 py-1 rounded text-gray-700">src/server/Server.cpp</code>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl border-l-4 border-green-600 shadow-sm hover:shadow-md transition">
+                    <h3 class="text-lg font-bold text-gray-900 mb-2">👤 Client</h3>
+                    <p class="text-gray-600 text-sm mb-3">Machine à états gérant le cycle requête/réponse HTTP</p>
+                    <code class="text-xs bg-gray-100 px-2 py-1 rounded text-gray-700">src/server/Client.cpp</code>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl border-l-4 border-yellow-600 shadow-sm hover:shadow-md transition">
+                    <h3 class="text-lg font-bold text-gray-900 mb-2">📄 HttpRequest</h3>
+                    <p class="text-gray-600 text-sm mb-3">Parser de requêtes HTTP/1.1 avec validation RFC</p>
+                    <code class="text-xs bg-gray-100 px-2 py-1 rounded text-gray-700">src/http/HttpRequest.cpp</code>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl border-l-4 border-red-600 shadow-sm hover:shadow-md transition">
+                    <h3 class="text-lg font-bold text-gray-900 mb-2">📤 HttpResponse</h3>
+                    <p class="text-gray-600 text-sm mb-3">Générateur de réponses HTTP avec headers et body</p>
+                    <code class="text-xs bg-gray-100 px-2 py-1 rounded text-gray-700">src/http/HttpResponse.cpp</code>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl border-l-4 border-indigo-600 shadow-sm hover:shadow-md transition">
+                    <h3 class="text-lg font-bold text-gray-900 mb-2">⚙️ ConfigParser</h3>
+                    <p class="text-gray-600 text-sm mb-3">Parser de configuration Nginx-like avec multi-serveurs</p>
+                    <code class="text-xs bg-gray-100 px-2 py-1 rounded text-gray-700">src/config/ConfigParser.cpp</code>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Section -->
+    <div class="relative overflow-hidden py-24">
+        <div class="absolute inset-0 bg-gradient-to-br from-blue-600 to-purple-600"></div>
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl sm:text-4xl font-bold text-white">Statistiques du Projet</h2>
+            </div>
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="text-center">
+                    <div class="text-5xl font-bold text-white mb-2">~3500</div>
+                    <div class="text-blue-100 text-lg">Lignes de Code</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-5xl font-bold text-white mb-2">15+</div>
+                    <div class="text-blue-100 text-lg">Classes C++</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-5xl font-bold text-white mb-2">100%</div>
+                    <div class="text-blue-100 text-lg">Tests Passés</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-5xl font-bold text-white mb-2">C++98</div>
+                    <div class="text-blue-100 text-lg">Standard</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-400 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <p class="text-sm">&copy; 2025 Webserv - Projet 42 School</p>
+                <p class="text-sm mt-2">Développé avec ❤️ en C++98</p>
+            </div>
+        </div>
+    </footer>
 </body>
 </html>

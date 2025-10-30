@@ -1,10 +1,11 @@
+#include "../common.hpp"
 #include "Client.hpp"
 #include "../cgi/CgiHandler.hpp"
 #include "../http/HttpRequest.hpp"
 #include "../http/HttpResponse.hpp"
 #include "../http/MultipartParser.hpp"
+#include "../utils.hpp"
 
-#include <fstream>
 
 Client::Client(int fd, const std::string& root) : _fd(fd), _state(CLIENT_READ), _root(root)
 {
@@ -30,11 +31,9 @@ bool Client::handleWrite()
         return true;
 
     ssize_t bytes = send(_fd, _bufferOut.c_str(), _bufferOut.size(), 0);
-    if (bytes < 0)
+    if (bytes <= 0)
     {
-        if (errno != EAGAIN && errno != EWOULDBLOCK)
-            std::cerr << "[Client] send() error: " << strerror(errno) << std::endl;
-        return true;
+        return false;
     }
 
     _bufferOut.erase(0, bytes);
@@ -73,6 +72,20 @@ bool Client::handleRead()
     HttpRequest req;
     if (!req.parse(_bufferIn))
         return true; // not complete yet
+
+    // --- Vérifier méthodes supportées ---
+    std::string method = req.getMethod();
+    if (method != "GET" && method != "POST" && method != "DELETE")
+    {
+        HttpResponse res;
+        res.setStatus(405);
+        res.setHeader("Allow", "GET, POST, DELETE");
+        res.setBodyString("<html><body><h1>405 Method Not Allowed</h1></body></html>");
+        _bufferOut = res.build();
+        _bufferIn.clear();
+        _state = CLIENT_WRITE;
+        return true;
+    }
 
     // --- Vérification POST complet ---
     if (req.getMethod() == "POST")
@@ -201,13 +214,23 @@ bool Client::handleRead()
         std::string uri = req.getUri();
         if (uri.find("/cgi-bin/") == 0)
         {
-            std::string script = _root + uri;
+            // Séparer le path du query string
+            std::string script_path = uri;
+            std::string query_string = "";
+            size_t qpos = uri.find('?');
+            if (qpos != std::string::npos)
+            {
+                script_path = uri.substr(0, qpos);
+                query_string = uri.substr(qpos + 1);
+            }
+
+            std::string script = _root + script_path;
 
             HttpResponse res;
             CgiHandler cgi;
             std::map<std::string, std::string> env;
 
-            // === Variables d’environnement minimales CGI/1.1 ===
+            // === Variables d'environnement minimales CGI/1.1 ===
             env["REQUEST_METHOD"] = req.getMethod();
             env["SERVER_PROTOCOL"] = "HTTP/1.1";
             env["GATEWAY_INTERFACE"] = "CGI/1.1";
@@ -215,9 +238,9 @@ bool Client::handleRead()
             env["SERVER_NAME"] = "127.0.0.1";
             env["SERVER_PORT"] = "8080";
             env["SCRIPT_FILENAME"] = script;
-            env["SCRIPT_NAME"] = uri;
-            env["PATH_INFO"] = uri;
-            env["QUERY_STRING"] = "";
+            env["SCRIPT_NAME"] = script_path;
+            env["PATH_INFO"] = script_path;
+            env["QUERY_STRING"] = query_string;
             env["REMOTE_ADDR"] = "127.0.0.1";
             env["REDIRECT_STATUS"] = "200"; // utile pour php-cgi
 
@@ -286,7 +309,8 @@ bool Client::handleRead()
                         std::string val = line.substr(7);
                         while (!val.empty() && val[0] == ' ')
                             val.erase(0, 1);
-                    status = ft_atoi(val.c_str());                    }
+                        status = ft_atoi(val.c_str());
+                    }
                     else if (line.find("Content-Type:") == 0)
                     {
                         std::string val = line.substr(13);

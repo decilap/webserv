@@ -1,9 +1,7 @@
 #ifndef CGI_HANDLER_HPP
 #define CGI_HANDLER_HPP
 
-#include <string>
-#include <map>
-#include <vector>
+#include "../common.hpp"
 
 class CgiHandler {
 public:
