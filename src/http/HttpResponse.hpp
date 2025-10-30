@@ -22,6 +22,7 @@ public:
     HttpResponse();
     void setStatus(int code);
     void setHeader(const std::string &key, const std::string &value);
+    void setBody(const std::string &body);
     void setBodyFromFile(const std::string &path);
     std::string build() const;
 };

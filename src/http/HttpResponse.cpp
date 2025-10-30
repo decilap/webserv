@@ -1,7 +1,8 @@
 #include "HttpResponse.hpp"
 
-HttpResponse::HttpResponse() {
+HttpResponse::HttpResponse() : _status(0) {
     _statusTexts[200] = "OK";
+    _statusTexts[201] = "Created";
     _statusTexts[404] = "Not Found";
     _statusTexts[403] = "Forbidden";
     _statusTexts[500] = "Internal Server Error";
@@ -11,6 +12,10 @@ void HttpResponse::setStatus(int code) { _status = code; }
 
 void HttpResponse::setHeader(const std::string &key, const std::string &value) {
     _headers[key] = value;
+}
+
+void HttpResponse::setBody(const std::string &body) {
+    _body = body;
 }
 
 void HttpResponse::setBodyFromFile(const std::string &path) {
@@ -46,7 +51,8 @@ void HttpResponse::setBodyFromFile(const std::string &path) {
         }
 
         _body = ss.str();
-        _status = 200;
+        if (_status == 0)
+            _status = 200;
         file.close();
     } catch (const std::exception &e) {
         // Gérer toute exception lors de la lecture

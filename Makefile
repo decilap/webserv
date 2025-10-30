@@ -8,6 +8,7 @@ SRC = src/main.cpp \
       src/server/PollManager.cpp \
       src/http/HttpRequest.cpp \
       src/http/HttpResponse.cpp \
+      src/http/MultipartParser.cpp \
       src/http/ErrorPage.cpp
 
 

@@ -1,6 +1,7 @@
 #include "ErrorPage.hpp"
 
 ErrorPage::ErrorPage() {
+    _defaultPages[201] = "www/error_pages/201.html";
     _defaultPages[404] = "www/error_pages/404.html";
     _defaultPages[403] = "www/error_pages/403.html";
     _defaultPages[500] = "www/error_pages/500.html";

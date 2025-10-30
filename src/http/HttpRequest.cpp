@@ -3,7 +3,14 @@
 HttpRequest::HttpRequest() {}
 
 bool HttpRequest::parse(const std::string &raw) {
-    std::istringstream stream(raw);
+    // Find the end of headers (double CRLF)
+    size_t header_end = raw.find("\r\n\r\n");
+    if (header_end == std::string::npos)
+        return false;
+
+    // Parse request line and headers
+    std::string header_section = raw.substr(0, header_end);
+    std::istringstream stream(header_section);
     std::string line;
 
     // Première ligne : "GET /index.html HTTP/1.1"
@@ -30,11 +37,8 @@ bool HttpRequest::parse(const std::string &raw) {
         _headers[key] = value;
     }
 
-    // Corps
-    std::string body;
-    while (std::getline(stream, line))
-        body += line + "\n";
-    _body = body;
+    // Corps - preserve binary data as-is
+    _body = raw.substr(header_end + 4);
 
     return true;
 }
