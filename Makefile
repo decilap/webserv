@@ -5,7 +5,9 @@ CXXFLAGS = -Wall -Wextra -Werror -std=c++98
 SRC = src/main.cpp \
       src/server/Server.cpp \
       src/server/Client.cpp \
-      src/server/PollManager.cpp
+      src/server/PollManager.cpp \
+      src/http/HttpRequest.cpp \
+      src/http/HttpResponse.cpp
 
 
 OBJ = $(SRC:.cpp=.o)

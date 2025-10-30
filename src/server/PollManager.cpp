@@ -46,29 +46,70 @@ void PollManager::acceptNewClient(int listenFd) {
 }
 
 void PollManager::handleClientData(int clientFd) {
-    char buffer[1024];
-    std::memset(buffer, 0, sizeof(buffer));
-    ssize_t bytes = recv(clientFd, buffer, sizeof(buffer) - 1, 0);
+    Client *client = _clients[clientFd];
+    if (!client) {
+        std::cerr << "[Poll] Client not found for fd " << clientFd << std::endl;
+        return;
+    }
 
-    if (bytes == 0) {
-        std::cout << "[Poll] Client disconnected (fd " << clientFd << ")" << std::endl;
-        close(clientFd);
+    if (client->getState() == CLIENT_READ) {
+        if (!client->handleRead()) {
+            // Connection closed or error
+            std::cout << "[Poll] Client disconnected (fd " << clientFd << ")" << std::endl;
+            delete client;
+            _clients.erase(clientFd);
+            for (size_t i = 0; i < _fds.size(); ++i) {
+                if (_fds[i].fd == clientFd) {
+                    _fds.erase(_fds.begin() + i);
+                    break;
+                }
+            }
+            return;
+        }
+        // If state changed to WRITE, update pollfd events
+        if (client->getState() == CLIENT_WRITE) {
+            for (size_t i = 0; i < _fds.size(); ++i) {
+                if (_fds[i].fd == clientFd) {
+                    _fds[i].events = POLLOUT;
+                    break;
+                }
+            }
+        }
+    }
+    else if (client->getState() == CLIENT_WRITE) {
+        if (!client->handleWrite()) {
+            std::cout << "[Poll] Client write error (fd " << clientFd << ")" << std::endl;
+            delete client;
+            _clients.erase(clientFd);
+            for (size_t i = 0; i < _fds.size(); ++i) {
+                if (_fds[i].fd == clientFd) {
+                    _fds.erase(_fds.begin() + i);
+                    break;
+                }
+            }
+            return;
+        }
+        // If state changed back to READ, update pollfd events
+        if (client->getState() == CLIENT_READ) {
+            for (size_t i = 0; i < _fds.size(); ++i) {
+                if (_fds[i].fd == clientFd) {
+                    _fds[i].events = POLLIN;
+                    break;
+                }
+            }
+        }
+    }
+    else if (client->getState() == CLIENT_CLOSE) {
+        std::cout << "[Poll] Client requested close (fd " << clientFd << ")" << std::endl;
+        delete client;
+        _clients.erase(clientFd);
         for (size_t i = 0; i < _fds.size(); ++i) {
             if (_fds[i].fd == clientFd) {
                 _fds.erase(_fds.begin() + i);
                 break;
             }
         }
-        return;
     }
-    else if (bytes < 0) {
-        if (errno != EAGAIN && errno != EWOULDBLOCK)
-            std::cerr << "[Poll] recv() failed: " << strerror(errno) << std::endl;
-        return;
-    }
-
-    // Echo simple pour test
-    send(clientFd, buffer, bytes, 0);
 }
 
 void PollManager::loop() {
@@ -88,14 +129,17 @@ void PollManager::loop() {
         }
 
         for (size_t i = 0; i < _fds.size(); ++i) {
-            if (!(_fds[i].revents & POLLIN))
+            if (!(_fds[i].revents & (POLLIN | POLLOUT)))
                 continue;
 
             int fd = _fds[i].fd;
-            if (_isListening.find(fd) != _isListening.end())
-                acceptNewClient(fd);
-            else
+            if (_isListening.find(fd) != _isListening.end()) {
+                if (_fds[i].revents & POLLIN)
+                    acceptNewClient(fd);
+            }
+            else {
                 handleClientData(fd);
+            }
         }
     }
 }
