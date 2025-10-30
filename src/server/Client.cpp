@@ -1,4 +1,7 @@
 #include "Client.hpp"
+#include "../http/HttpRequest.hpp"
+#include "../http/HttpResponse.hpp"
+#include <fstream>
 
 Client::Client(int fd) : _fd(fd), _state(CLIENT_READ) {
     int flags = fcntl(fd, F_GETFL, 0);
@@ -15,25 +18,41 @@ Client::~Client() {
 int Client::getFd() const { return _fd; }
 ClientState Client::getState() const { return _state; }
 void Client::setState(ClientState s) { _state = s; }
-
 bool Client::handleRead() {
-    char buffer[1024];
+    char buffer[2048];
     std::memset(buffer, 0, sizeof(buffer));
     ssize_t bytes = recv(_fd, buffer, sizeof(buffer) - 1, 0);
 
-    if (bytes == 0) {
+    if (bytes <= 0) {
         _state = CLIENT_CLOSE;
-        return false; // client disconnected
-    }
-    else if (bytes < 0) {
-        if (errno != EAGAIN && errno != EWOULDBLOCK)
-            std::cerr << "[Client] recv() error: " << strerror(errno) << std::endl;
-        return true;
+        return false;
     }
 
-    _bufferIn.append(buffer, bytes);
-    _bufferOut = _bufferIn; // pour l’instant → écho
-    _bufferIn.clear();
+    std::string rawRequest(buffer, bytes);
+    std::cout << "[Client] Received request:\n" << rawRequest << std::endl;
+
+    HttpRequest req;
+    if (!req.parse(rawRequest)) {
+        std::cerr << "[Client] Failed to parse request" << std::endl;
+        _state = CLIENT_CLOSE;
+        return false;
+    }
+
+    std::string uri = req.getUri();
+    std::string path = "www";
+
+    // Si l'URI est "/" ou vide, servir index.html
+    if (uri == "/" || uri.empty())
+        path += "/index.html";
+    else
+        path += uri;
+
+    std::cout << "[Client] Requested URI: " << uri << " -> File: " << path << std::endl;
+
+    HttpResponse res;
+    res.setBodyFromFile(path);
+
+    _bufferOut = res.build();
     _state = CLIENT_WRITE;
     return true;
 }
