@@ -21,9 +21,10 @@ private:
     ClientState _state;
     std::string _bufferIn;
     std::string _bufferOut;
+    std::string _root; // document root for this client's server
 
 public:
-    Client(int fd);
+    Client(int fd, const std::string& root = "www");
     ~Client();
 
     int getFd() const;

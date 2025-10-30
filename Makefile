@@ -11,7 +11,10 @@ SRC = src/main.cpp \
       src/http/MultipartParser.cpp \
       src/http/ErrorPage.cpp \
       src/http/Autoindex.cpp \
-      src/cgi/CgiHandler.cpp
+      src/cgi/CgiHandler.cpp \
+      src/config/ConfigParser.cpp \
+      src/config/LocationConfig.cpp \
+      src/config/ServerConfig.cpp
 
 
 OBJ = $(SRC:.cpp=.o)

@@ -1,32 +1,33 @@
 #ifndef SERVER_HPP
 #define SERVER_HPP
 
-#include <iostream>
 #include <vector>
 #include <string>
-#include <cstring>      // memset
-#include <cerrno>
-#include <unistd.h>     // close
-#include <fcntl.h>      // fcntl
-#include <netinet/in.h> // sockaddr_in
-#include <sys/socket.h> // socket, bind, listen
+#include "../config/ServerConfig.hpp"
 
 class Server {
 private:
     std::vector<int> _listenSockets;
     bool _running;
 
+    std::vector<ServerConfig> _configs; // ✅ nouvelle donnée : la configuration du ou des serveurs
+
     void createListeningSocket(int port);
     void setNonBlocking(int fd);
 
 public:
-    Server();
+    // --- Constructeurs ---
+    Server(); // par défaut (ancienne version)
+    Server(const std::vector<ServerConfig> &configs); // ✅ nouveau constructeur configuré
+
     ~Server();
 
-    void start();  // lance les sockets d’écoute
+    // --- Méthodes ---
+    void start();  // lance les sockets d'écoute
     void stop();   // ferme proprement
     std::vector<int> getListeningSockets() const;
-
+    const std::vector<ServerConfig>& getConfigs() const;
 };
 
 #endif
+

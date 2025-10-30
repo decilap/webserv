@@ -1,4 +1,12 @@
 #include "PollManager.hpp"
+#include "Client.hpp"
+#include <netinet/in.h>   // ✅ sockaddr_in, htons, htonl
+#include <sys/socket.h>   // ✅ socket(), bind(), accept()
+#include <arpa/inet.h>    // ✅ inet_ntoa(), inet_addr() (optionnel)
+#include <unistd.h>       // ✅ close()
+#include <fcntl.h>        // ✅ fcntl()
+#include <cerrno>         // ✅ errno
+#include <cstring>        // ✅ strerror()
 
 PollManager::PollManager() : _running(false) {}
 PollManager::~PollManager() {
@@ -15,6 +23,10 @@ void PollManager::addListeningSockets(const std::vector<int>& sockets) {
         _fds.push_back(pfd);
         _isListening[sockets[i]] = true;
     }
+}
+
+void PollManager::addServerConfig(int socket, const ServerConfig& config) {
+    _socketToConfig[socket] = config;
 }
 
 #include "PollManager.hpp"
@@ -39,7 +51,14 @@ void PollManager::acceptNewClient(int listenFd) {
     clientPfd.events = POLLIN;
     clientPfd.revents = 0;
     _fds.push_back(clientPfd);
-    Client *c = new Client(clientFd);
+
+    // Get the root from the server config for this listening socket
+    std::string root = "www"; // default
+    if (_socketToConfig.find(listenFd) != _socketToConfig.end()) {
+        root = _socketToConfig[listenFd].root;
+    }
+
+    Client *c = new Client(clientFd, root);
     _clients[clientFd] = c;
 
     std::cout << "[Poll] New client connected (fd " << clientFd << ")" << std::endl;

@@ -6,13 +6,13 @@
 
 #include <fstream>
 
-Client::Client(int fd) : _fd(fd), _state(CLIENT_READ)
+Client::Client(int fd, const std::string& root) : _fd(fd), _state(CLIENT_READ), _root(root)
 {
     int flags = fcntl(fd, F_GETFL, 0);
     if (flags == -1)
         flags = 0;
     fcntl(fd, F_SETFL, flags | O_NONBLOCK);
-    std::cout << "[Client] Created client fd=" << fd << std::endl;
+    std::cout << "[Client] Created client fd=" << fd << " root=" << root << std::endl;
 }
 
 Client::~Client()
@@ -91,7 +91,7 @@ bool Client::handleRead()
     if (req.getMethod() == "DELETE")
     {
         std::string uri = req.getUri();
-        std::string path = "www" + uri;
+        std::string path = _root + uri;
 
         HttpResponse res;
         struct stat st;
@@ -100,19 +100,19 @@ bool Client::handleRead()
         {
             std::cerr << "[DELETE] Not found: " << path << std::endl;
             res.setStatus(404);
-            res.setBodyFromFile("www/error_pages/404.html");
+            res.setBodyFromFile(_root + "/error_pages/404.html");
         }
         else if (S_ISDIR(st.st_mode))
         {
             std::cerr << "[DELETE] Target is directory: " << path << std::endl;
             res.setStatus(403);
-            res.setBodyFromFile("www/error_pages/403.html");
+            res.setBodyFromFile(_root + "/error_pages/403.html");
         }
         else if (access(path.c_str(), W_OK) != 0)
         {
             std::cerr << "[DELETE] Permission denied: " << path << std::endl;
             res.setStatus(403);
-            res.setBodyFromFile("www/error_pages/403.html");
+            res.setBodyFromFile(_root + "/error_pages/403.html");
         }
         else
         {
@@ -130,7 +130,7 @@ bool Client::handleRead()
             {
                 std::perror("[DELETE] remove() failed");
                 res.setStatus(500);
-                res.setBodyFromFile("www/error_pages/500.html");
+                res.setBodyFromFile(_root + "/error_pages/500.html");
             }
         }
 
@@ -167,7 +167,7 @@ bool Client::handleRead()
                 const std::map<std::string, std::string> &files = parser.getFiles();
                 for (std::map<std::string, std::string>::const_iterator f = files.begin(); f != files.end(); ++f)
                 {
-                    std::string dest = "www/upload/" + f->first;
+                    std::string dest = _root + "/upload/" + f->first;
                     std::ofstream out(dest.c_str(), std::ios::binary);
                     if (!out.is_open())
                     {
@@ -201,7 +201,7 @@ bool Client::handleRead()
         std::string uri = req.getUri();
         if (uri.find("/cgi-bin/") == 0)
         {
-            std::string script = "www" + uri;
+            std::string script = _root + uri;
 
             HttpResponse res;
             CgiHandler cgi;
@@ -235,7 +235,7 @@ bool Client::handleRead()
             {
                 std::cerr << "[CGI] Not found: " << script << std::endl;
                 res.setStatus(404);
-                res.setBodyFromFile("www/error_pages/404.html");
+                res.setBodyFromFile(_root + "/error_pages/404.html");
                 _bufferOut = res.build();
                 _bufferIn.clear();
                 _state = CLIENT_WRITE;
@@ -245,7 +245,7 @@ bool Client::handleRead()
             {
                 std::cerr << "[CGI] Permission denied: " << script << std::endl;
                 res.setStatus(403);
-                res.setBodyFromFile("www/error_pages/403.html");
+                res.setBodyFromFile(_root + "/error_pages/403.html");
                 _bufferOut = res.build();
                 _bufferIn.clear();
                 _state = CLIENT_WRITE;
@@ -332,10 +332,10 @@ bool Client::handleRead()
     // === [5] GET classique ===
     HttpResponse res;
     std::string uri = req.getUri();
-    std::string path = "www" + uri;
+    std::string path = _root + uri;
 
-    if (path == "www/")
-        path = "www/index.html";
+    if (uri == "/")
+        path = _root + "/index.html";
 
     res.setBodyFromFile(path, uri);
     _bufferOut = res.build();
