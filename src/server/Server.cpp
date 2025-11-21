@@ -80,7 +80,7 @@ void Server::stop() {
     _running = false;
 }
 
-std::vector<int> Server::getListeningSockets() const {
+const std::vector<int>& Server::getListeningSockets() const {
     return _listenSockets;
 }
 

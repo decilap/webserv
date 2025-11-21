@@ -27,11 +27,12 @@ sys.stdout.write(f"Set-Cookie: session_id={session_id}; Path=/; Max-Age=3600\r\n
 sys.stdout.write(f"Set-Cookie: visit_count={visit_count}; Path=/; Max-Age=3600\r\n")
 sys.stdout.write(f"Set-Cookie: username=demo_user; Path=/; Max-Age=3600\r\n")
 sys.stdout.write("\r\n")
+sys.stdout.flush()
 
 # HTML response
-print("<html>")
-print("<head><title>Session Management Demo</title>")
-print("<style>")
+sys.stdout.write("<html>\n")
+sys.stdout.write("<head><title>Session Management Demo</title>\n")
+sys.stdout.write("<style>\n")
 print("body { font-family: Arial; padding: 30px; background: #f5f5f5; }")
 print(".container { max-width: 600px; margin: 0 auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }")
 print("h1 { color: #333; border-bottom: 3px solid #4CAF50; padding-bottom: 10px; }")

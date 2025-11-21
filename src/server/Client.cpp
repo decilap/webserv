@@ -232,6 +232,7 @@ bool Client::handleRead()
 
             // === Variables d'environnement minimales CGI/1.1 ===
             env["REQUEST_METHOD"] = req.getMethod();
+            env["REQUEST_URI"] = req.getUri(); // URI complète de la requête
             env["SERVER_PROTOCOL"] = "HTTP/1.1";
             env["GATEWAY_INTERFACE"] = "CGI/1.1";
             env["SERVER_SOFTWARE"] = "Webserv/1.0";
@@ -243,12 +244,39 @@ bool Client::handleRead()
             env["QUERY_STRING"] = query_string;
             env["REMOTE_ADDR"] = "127.0.0.1";
             env["REDIRECT_STATUS"] = "200"; // utile pour php-cgi
+            env["DOCUMENT_ROOT"] = _root; // Répertoire racine du serveur
 
+            // === Transmission des headers HTTP ===
             std::map<std::string, std::string> headers = req.getHeaders();
+
+            // Headers spéciaux sans préfixe HTTP_
             if (headers.find("Content-Type") != headers.end())
                 env["CONTENT_TYPE"] = headers["Content-Type"];
             if (headers.find("Content-Length") != headers.end())
                 env["CONTENT_LENGTH"] = headers["Content-Length"];
+
+            // Tous les autres headers avec préfixe HTTP_
+            for (std::map<std::string, std::string>::const_iterator it = headers.begin();
+                 it != headers.end(); ++it) {
+                std::string key = it->first;
+
+                // Skip Content-Type et Content-Length (déjà ajoutés)
+                if (key == "Content-Type" || key == "Content-Length")
+                    continue;
+
+                // Convertir le nom du header en majuscules et remplacer - par _
+                std::string envKey = "HTTP_";
+                for (size_t i = 0; i < key.length(); ++i) {
+                    if (key[i] == '-')
+                        envKey += '_';
+                    else if (key[i] >= 'a' && key[i] <= 'z')
+                        envKey += (key[i] - 'a' + 'A');
+                    else
+                        envKey += key[i];
+                }
+
+                env[envKey] = it->second;
+            }
 
             std::string body = (req.getMethod() == "POST") ? req.getBody() : "";
 

@@ -94,7 +94,7 @@ CgiHandler::Result CgiHandler::run(const std::string &script_path,
     // ferme stdin enfant (signale EOF)
     close(inpipe[1]);
 
-    // Lit jusqu’au timeout ou fin
+    // Lit jusqu'au timeout ou fin
     std::string out;
     out.reserve(8192);
 
@@ -143,10 +143,16 @@ CgiHandler::Result CgiHandler::run(const std::string &script_path,
             break;
         }
 
-        elapsed += step;
+        // Only count time if poll actually timed out (pr == 0)
+        // Don't count time if data was available (pr > 0)
+        if (pr == 0) {
+            elapsed += step;
+        }
+
         if (elapsed >= timeout_ms) {
             r.timed_out = true;
             kill(pid, SIGKILL);
+            waitpid(pid, &status, 0);
             // vider pipe si dispo
             (void)read(outpipe[0], buf, sizeof(buf));
             break;

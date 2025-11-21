@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des Uploads - Webserv</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .fade-in {
+            animation: fadeIn 0.5s;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .slide-in {
+            animation: slideIn 0.3s ease-out;
+        }
+        @keyframes slideIn {
+            from { transform: translateX(-20px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        .upload-zone {
+            border: 3px dashed #cbd5e0;
+            transition: all 0.3s;
+        }
+        .upload-zone.dragover {
+            border-color: #4299e1;
+            background-color: #ebf8ff;
+        }
+        .progress-bar {
+            transition: width 0.3s ease;
+        }
+        .file-item {
+            transition: all 0.3s;
+        }
+        .file-item:hover {
+            transform: translateX(5px);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-purple-50 min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-white border-b border-gray-200 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center space-x-4">
+                    <a href="/" class="flex items-center space-x-2">
+                        <span class="text-2xl">🌐</span>
+                        <span class="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Webserv</span>
+                    </a>
+                    <span class="text-gray-300">|</span>
+                    <span class="text-gray-600 font-semibold">Gestion des Uploads</span>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="/bonus.html" class="px-4 py-2 text-gray-600 hover:text-gray-900 transition">
+                        Bonus
+                    </a>
+                    <a href="/login.html" class="px-4 py-2 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700 transition">
+                        Login
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Header -->
+        <div class="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 rounded-3xl p-8 mb-8 text-white shadow-2xl fade-in">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-4xl font-bold mb-2 flex items-center">
+                        <span class="text-5xl mr-4">📤</span>
+                        Gestion des Fichiers
+                    </h1>
+                    <p class="text-purple-100 text-lg">Upload, visualisation et suppression de fichiers avec jQuery</p>
+                </div>
+                <div class="text-6xl animate-pulse">📁</div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Upload Section -->
+            <div class="bg-white rounded-3xl shadow-2xl p-8 border-2 border-blue-200">
+                <h2 class="text-3xl font-bold text-gray-900 mb-6 flex items-center">
+                    <span class="text-4xl mr-3">⬆️</span>
+                    Uploader des fichiers
+                </h2>
+
+                <!-- Upload Zone -->
+                <div id="upload-zone" class="upload-zone rounded-2xl p-8 mb-6 text-center cursor-pointer">
+                    <div class="text-6xl mb-4">📂</div>
+                    <p class="text-xl font-semibold text-gray-700 mb-2">
+                        Glissez-déposez vos fichiers ici
+                    </p>
+                    <p class="text-gray-500 mb-4">ou</p>
+                    <label for="file-input" class="inline-block px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 cursor-pointer transition transform hover:scale-105">
+                        Parcourir les fichiers
+                    </label>
+                    <input type="file" id="file-input" class="hidden" multiple>
+                    <p class="text-xs text-gray-500 mt-4">Taille maximale: 2MB par fichier</p>
+                </div>
+
+                <!-- Progress Bar -->
+                <div id="progress-container" class="hidden mb-6">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-sm font-semibold text-gray-700">Upload en cours...</span>
+                        <span id="progress-percent" class="text-sm font-bold text-blue-600">0%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-4 overflow-hidden">
+                        <div id="progress-bar" class="progress-bar bg-gradient-to-r from-blue-500 to-purple-500 h-4 rounded-full" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <!-- Messages -->
+                <div id="upload-messages" class="space-y-2"></div>
+
+                <!-- Stats -->
+                <div class="grid grid-cols-3 gap-4 mt-6">
+                    <div class="bg-blue-50 rounded-xl p-4 text-center">
+                        <div class="text-3xl font-bold text-blue-600" id="total-files">0</div>
+                        <div class="text-xs text-gray-600">Fichiers</div>
+                    </div>
+                    <div class="bg-green-50 rounded-xl p-4 text-center">
+                        <div class="text-3xl font-bold text-green-600" id="success-count">0</div>
+                        <div class="text-xs text-gray-600">Réussis</div>
+                    </div>
+                    <div class="bg-red-50 rounded-xl p-4 text-center">
+                        <div class="text-3xl font-bold text-red-600" id="error-count">0</div>
+                        <div class="text-xs text-gray-600">Erreurs</div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="mt-6 space-y-2">
+                    <button id="clear-messages" class="w-full px-4 py-2 bg-gray-600 text-white font-semibold rounded-lg hover:bg-gray-700 transition">
+                        <span class="mr-2">🧹</span>
+                        Effacer les messages
+                    </button>
+                </div>
+            </div>
+
+            <!-- Files List Section -->
+            <div class="bg-white rounded-3xl shadow-2xl p-8 border-2 border-purple-200">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-3xl font-bold text-gray-900 flex items-center">
+                        <span class="text-4xl mr-3">📋</span>
+                        Fichiers uploadés
+                    </h2>
+                    <button id="refresh-files" class="px-4 py-2 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700 transition transform hover:scale-105">
+                        <span class="mr-2">🔄</span>
+                        Rafraîchir
+                    </button>
+                </div>
+
+                <!-- Search -->
+                <div class="mb-6">
+                    <div class="relative">
+                        <input
+                            type="text"
+                            id="search-files"
+                            class="w-full px-4 py-3 pl-10 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none transition"
+                            placeholder="Rechercher un fichier..."
+                        >
+                        <svg class="absolute left-3 top-3.5 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Files List -->
+                <div id="files-list-container" class="space-y-2 max-h-96 overflow-y-auto">
+                    <div class="flex items-center justify-center py-12 text-gray-400">
+                        <svg class="animate-spin h-12 w-12" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Bulk Actions -->
+                <div class="mt-6 space-y-2">
+                    <button id="select-all" class="w-full px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition">
+                        <span class="mr-2">☑️</span>
+                        Tout sélectionner
+                    </button>
+                    <button id="delete-selected" class="w-full px-4 py-2 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition">
+                        <span class="mr-2">🗑️</span>
+                        Supprimer la sélection
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Info Box -->
+        <div class="mt-8 bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl p-6 border-2 border-blue-200">
+            <h3 class="text-xl font-bold text-gray-900 mb-4 flex items-center">
+                <span class="text-2xl mr-3">💡</span>
+                Fonctionnalités jQuery
+            </h3>
+            <div class="grid md:grid-cols-2 gap-4">
+                <div class="space-y-2 text-gray-700">
+                    <p class="flex items-start">
+                        <span class="text-green-500 mr-2 mt-1">✓</span>
+                        <span><strong>Upload AJAX:</strong> Upload de fichiers sans rechargement de page</span>
+                    </p>
+                    <p class="flex items-start">
+                        <span class="text-green-500 mr-2 mt-1">✓</span>
+                        <span><strong>Drag & Drop:</strong> Glissez-déposez vos fichiers directement</span>
+                    </p>
+                    <p class="flex items-start">
+                        <span class="text-green-500 mr-2 mt-1">✓</span>
+                        <span><strong>Multiple files:</strong> Uploadez plusieurs fichiers en même temps</span>
+                    </p>
+                </div>
+                <div class="space-y-2 text-gray-700">
+                    <p class="flex items-start">
+                        <span class="text-green-500 mr-2 mt-1">✓</span>
+                        <span><strong>Liste dynamique:</strong> Affichage en temps réel des fichiers</span>
+                    </p>
+                    <p class="flex items-start">
+                        <span class="text-green-500 mr-2 mt-1">✓</span>
+                        <span><strong>Suppression:</strong> Suppression avec confirmation</span>
+                    </p>
+                    <p class="flex items-start">
+                        <span class="text-green-500 mr-2 mt-1">✓</span>
+                        <span><strong>Recherche:</strong> Filtrage en temps réel</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    $(document).ready(function() {
+        console.log('📤 Upload manager loaded with jQuery ' + $.fn.jquery);
+
+        let selectedFiles = new Set();
+        let allFiles = [];
+        let uploadStats = { total: 0, success: 0, error: 0 };
+
+        // Initialize
+        loadFilesList();
+
+        // ==================== FILE UPLOAD ====================
+
+        // File input change
+        $('#file-input').on('change', function(e) {
+            handleFiles(e.target.files);
+        });
+
+        // Drag and drop handlers
+        $('#upload-zone').on('dragover', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            $(this).addClass('dragover');
+        });
+
+        $('#upload-zone').on('dragleave', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            $(this).removeClass('dragover');
+        });
+
+        $('#upload-zone').on('drop', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            $(this).removeClass('dragover');
+
+            const files = e.originalEvent.dataTransfer.files;
+            handleFiles(files);
+        });
+
+        // Click on upload zone to trigger file input
+        $('#upload-zone').on('click', function(e) {
+            if (e.target.id !== 'file-input') {
+                $('#file-input').click();
+            }
+        });
+
+        // Handle file uploads
+        function handleFiles(files) {
+            if (files.length === 0) return;
+
+            console.log(`📤 Uploading ${files.length} file(s)...`);
+            uploadStats.total += files.length;
+            updateStats();
+
+            $('#progress-container').removeClass('hidden');
+            let completedUploads = 0;
+
+            // Upload each file
+            Array.from(files).forEach((file, index) => {
+                uploadFile(file, () => {
+                    completedUploads++;
+                    const progress = Math.round((completedUploads / files.length) * 100);
+                    updateProgress(progress);
+
+                    if (completedUploads === files.length) {
+                        setTimeout(() => {
+                            $('#progress-container').addClass('hidden');
+                            updateProgress(0);
+                            loadFilesList();
+                        }, 1000);
+                    }
+                });
+            });
+        }
+
+        // Upload single file
+        function uploadFile(file, callback) {
+            const formData = new FormData();
+            formData.append('file', file);
+
+            $.ajax({
+                url: '/upload',
+                method: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                timeout: 30000,
+                success: function(response) {
+                    console.log(`✓ Uploaded: ${file.name}`);
+                    uploadStats.success++;
+                    updateStats();
+                    showMessage(`✓ ${file.name} uploadé avec succès`, 'success');
+                    callback();
+                },
+                error: function(xhr, status, error) {
+                    console.error(`✗ Failed to upload: ${file.name}`, error);
+                    uploadStats.error++;
+                    updateStats();
+                    showMessage(`✗ Erreur upload ${file.name}: ${status}`, 'error');
+                    callback();
+                }
+            });
+        }
+
+        // Update progress bar
+        function updateProgress(percent) {
+            $('#progress-bar').css('width', percent + '%');
+            $('#progress-percent').text(percent + '%');
+        }
+
+        // Update stats
+        function updateStats() {
+            $('#total-files').text(uploadStats.total);
+            $('#success-count').text(uploadStats.success);
+            $('#error-count').text(uploadStats.error);
+        }
+
+        // Show message
+        function showMessage(message, type) {
+            const bgColor = type === 'success' ? 'bg-green-50 border-green-500 text-green-800' : 'bg-red-50 border-red-500 text-red-800';
+            const icon = type === 'success' ? '✓' : '✗';
+
+            const $msg = $(`
+                <div class="slide-in border-l-4 ${bgColor} p-3 rounded-r-lg flex items-center justify-between">
+                    <span><strong>${icon}</strong> ${message}</span>
+                    <button class="remove-msg text-gray-600 hover:text-gray-900 ml-4">×</button>
+                </div>
+            `);
+
+            $('#upload-messages').prepend($msg);
+
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                $msg.fadeOut(300, function() { $(this).remove(); });
+            }, 5000);
+        }
+
+        // Remove message handler
+        $(document).on('click', '.remove-msg', function() {
+            $(this).parent().fadeOut(300, function() { $(this).remove(); });
+        });
+
+        // Clear all messages
+        $('#clear-messages').on('click', function() {
+            $('#upload-messages').empty();
+        });
+
+        // ==================== FILE LISTING ====================
+
+        // Load files list
+        function loadFilesList() {
+            console.log('📋 Loading files list...');
+
+            $.ajax({
+                url: '/upload',
+                method: 'GET',
+                timeout: 5000,
+                success: function(html) {
+                    console.log('✓ Files list loaded');
+                    parseFilesFromHTML(html);
+                    displayFiles();
+                },
+                error: function(xhr, status, error) {
+                    console.error('✗ Failed to load files:', error);
+                    $('#files-list-container').html(`
+                        <div class="text-center text-red-600 py-8">
+                            <div class="text-4xl mb-2">⚠️</div>
+                            <p>Erreur lors du chargement des fichiers</p>
+                        </div>
+                    `);
+                }
+            });
+        }
+
+        // Parse files from autoindex HTML
+        function parseFilesFromHTML(html) {
+            allFiles = [];
+            const $html = $('<div>').html(html);
+
+            $html.find('a').each(function() {
+                const filename = $(this).text().trim();
+                // Skip parent directory link and empty
+                if (filename && filename !== '../' && filename !== '..' && !filename.startsWith('Parent')) {
+                    allFiles.push(filename);
+                }
+            });
+
+            console.log(`📁 Found ${allFiles.length} file(s)`);
+        }
+
+        // Display files
+        function displayFiles(filter = '') {
+            const $container = $('#files-list-container');
+            $container.empty();
+
+            const filteredFiles = allFiles.filter(f =>
+                f.toLowerCase().includes(filter.toLowerCase())
+            );
+
+            if (filteredFiles.length === 0) {
+                $container.html(`
+                    <div class="text-center text-gray-400 py-12">
+                        <div class="text-5xl mb-4">📭</div>
+                        <p>Aucun fichier trouvé</p>
+                    </div>
+                `);
+                return;
+            }
+
+            filteredFiles.forEach((filename, index) => {
+                const isSelected = selectedFiles.has(filename);
+                const $file = $(`
+                    <div class="file-item flex items-center justify-between p-4 rounded-lg border-2 ${isSelected ? 'border-purple-500 bg-purple-50' : 'border-gray-200 hover:border-purple-300'} transition" data-filename="${filename}" style="animation-delay: ${index * 0.05}s">
+                        <div class="flex items-center space-x-3 flex-1">
+                            <input type="checkbox" class="file-checkbox w-5 h-5 text-purple-600 rounded" ${isSelected ? 'checked' : ''}>
+                            <span class="text-2xl">${getFileIcon(filename)}</span>
+                            <div class="flex-1">
+                                <p class="font-semibold text-gray-900">${filename}</p>
+                                <a href="/upload/${filename}" target="_blank" class="text-xs text-blue-600 hover:underline">Télécharger</a>
+                            </div>
+                        </div>
+                        <button class="delete-file px-3 py-2 bg-red-100 text-red-600 font-semibold rounded-lg hover:bg-red-200 transition">
+                            🗑️
+                        </button>
+                    </div>
+                `);
+
+                $container.append($file);
+            });
+        }
+
+        // Get file icon based on extension
+        function getFileIcon(filename) {
+            const ext = filename.split('.').pop().toLowerCase();
+            const icons = {
+                'pdf': '📄', 'doc': '📝', 'docx': '📝', 'txt': '📝',
+                'jpg': '🖼️', 'jpeg': '🖼️', 'png': '🖼️', 'gif': '🖼️', 'svg': '🖼️',
+                'zip': '📦', 'rar': '📦', 'tar': '📦', 'gz': '📦',
+                'mp3': '🎵', 'wav': '🎵', 'mp4': '🎬', 'avi': '🎬',
+                'js': '📜', 'py': '🐍', 'cpp': '⚙️', 'html': '🌐', 'css': '🎨',
+            };
+            return icons[ext] || '📄';
+        }
+
+        // Refresh files list
+        $('#refresh-files').on('click', function() {
+            $(this).prop('disabled', true).html('<svg class="animate-spin h-5 w-5 mx-auto" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>');
+
+            loadFilesList();
+
+            setTimeout(() => {
+                $('#refresh-files').prop('disabled', false).html('<span class="mr-2">🔄</span> Rafraîchir');
+            }, 1000);
+        });
+
+        // Search files
+        $('#search-files').on('input', function() {
+            const filter = $(this).val();
+            displayFiles(filter);
+        });
+
+        // ==================== FILE DELETION ====================
+
+        // Checkbox selection
+        $(document).on('change', '.file-checkbox', function() {
+            const filename = $(this).closest('.file-item').data('filename');
+            if ($(this).is(':checked')) {
+                selectedFiles.add(filename);
+            } else {
+                selectedFiles.delete(filename);
+            }
+            displayFiles($('#search-files').val());
+        });
+
+        // Select all
+        $('#select-all').on('click', function() {
+            if (selectedFiles.size === allFiles.length) {
+                selectedFiles.clear();
+                $(this).html('<span class="mr-2">☑️</span> Tout sélectionner');
+            } else {
+                allFiles.forEach(f => selectedFiles.add(f));
+                $(this).html('<span class="mr-2">☐</span> Tout désélectionner');
+            }
+            displayFiles($('#search-files').val());
+        });
+
+        // Delete single file
+        $(document).on('click', '.delete-file', function() {
+            const $fileItem = $(this).closest('.file-item');
+            const filename = $fileItem.data('filename');
+
+            if (confirm(`Êtes-vous sûr de vouloir supprimer "${filename}" ?`)) {
+                deleteFile(filename);
+            }
+        });
+
+        // Delete selected files
+        $('#delete-selected').on('click', function() {
+            if (selectedFiles.size === 0) {
+                alert('Aucun fichier sélectionné');
+                return;
+            }
+
+            if (confirm(`Supprimer ${selectedFiles.size} fichier(s) sélectionné(s) ?`)) {
+                const filesToDelete = Array.from(selectedFiles);
+                filesToDelete.forEach(filename => deleteFile(filename));
+                selectedFiles.clear();
+            }
+        });
+
+        // Delete file function
+        function deleteFile(filename) {
+            console.log(`🗑️ Deleting: ${filename}`);
+
+            $.ajax({
+                url: '/upload/' + filename,
+                method: 'DELETE',
+                timeout: 5000,
+                success: function() {
+                    console.log(`✓ Deleted: ${filename}`);
+                    showMessage(`✓ ${filename} supprimé`, 'success');
+                    selectedFiles.delete(filename);
+                    loadFilesList();
+                },
+                error: function(xhr, status, error) {
+                    console.error(`✗ Failed to delete: ${filename}`, error);
+                    showMessage(`✗ Erreur suppression ${filename}`, 'error');
+                }
+            });
+        }
+    });
+    </script>
+</body>
+</html>
